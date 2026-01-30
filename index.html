@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+
+<head>
+    <meta name="description" content="کتێبخانەی دیجیتاڵی کوردی بۆ خوێندن و فێربوون. هەزاران کتێب لە یەک شوێن.">
+<meta name="keywords" content="کتێب، کوردی، خوێندن، PDF، کتاب، Kurdish books">
+<meta name="author" content="Xwenar Library">
+<meta name="robots" content="index, follow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>خوێنەر</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ================= TOP BAR ================= -->
+<div class="topbar">
+  <div class="row">
+     <span>Xwenar - خوێنەر</span>
+  </div>
+</div>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <h1> خوێنەر کتێبخانەیەکی ئەلیکترۆنی📚</h1>
+  <p>هەزاران کتێب بە ئاسانی بەدەست بێنە</p>
+</div>
+
+<!-- ================= CATEGORIES ================= -->
+<div class="container">
+  <div class="section-title">بەشەکان</div>
+  <div id="cats" class="cat-grid"></div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer-modern">
+  <div class="footer-wrap">
+
+    <!-- Brand -->
+    <div class="footer-col">
+      <div class="footer-brand">
+        <div class="logo"></div>
+        <span>Xwenar</span>
+      </div>
+      <p class="footer-desc">
+        کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="footer-col">
+      <h4>پەیوەندی</h4>
+      <a href="#">دەربارەی ئێمە</a>
+      <a href="#">یارمەتی</a>
+      <a href="#">سیاسەتی تایبەتی</a>
+      <a href="#">مەرجەکان</a>
+    </div>
+
+    <!-- Stores -->
+    <div class="footer-col">
+      <h4>داگرتن</h4>
+      <div class="store-btns">
+        <a href="#" class="store google">
+          <i class="fab fa-google-play"></i>
+          <span>Play Store</span>
+        </a>
+        <a href="#" class="store apple">
+          <i class="fab fa-apple"></i>
+          <span>App Store</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="footer-col">
+      <h4>شوێنەکانمان</h4>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 Xwenar Library — All rights reserved
+  </div>
+</footer>
+
+
+<script src="app.js"></script>
+<script>
+const catsEl = document.getElementById("cats");
+
+/* Load first book image for each category */
+async function loadCategories(){
+  let html = "";
+
+  for(const c of CATEGORIES){
+    try{
+      const books = await fetchBooks(c.file);
+      const img = books[0]?.image || "";
+
+      html += `
+        <a class="cat-card" href="category.html?file=${encodeURIComponent(c.file)}&name=${encodeURIComponent(c.name)}">
+          <div class="cat-img" style="background-image:url('${img}')"></div>
+          <div class="cat-overlay"></div>
+          <div class="cat-title">${c.name}</div>
+        </a>
+      `;
+    }catch(e){
+      html += `
+        <a class="cat-card" href="category.html?file=${encodeURIComponent(c.file)}&name=${encodeURIComponent(c.name)}">
+          <div class="cat-img" style="background:#ddd"></div>
+          <div class="cat-overlay"></div>
+          <div class="cat-title">${c.name}</div>
+        </a>
+      `;
+    }
+  }
+
+  catsEl.innerHTML = html;
+}
+
+loadCategories();
+</script>
+
+</body>
+</html>

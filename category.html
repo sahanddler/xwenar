@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta name="description" content="کتێبخانەی دیجیتاڵی کوردی بۆ خوێندن و فێربوون. هەزاران کتێب لە یەک شوێن.">
+<meta name="keywords" content="کتێب، کوردی، خوێندن، PDF، کتاب، Kurdish books">
+<meta name="author" content="Xwenar Library">
+<meta name="robots" content="index, follow">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Books</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <div class="brand" onclick="location.href='index.html'" style="cursor:pointer;">
+      <div class="logo"></div>
+      <span id="title">Xwenar</span>
+    </div>
+
+    <div class="actions">
+      <div class="input">
+        <input id="search" placeholder="گەڕان بە ناوی نووسەر یان کتێب..." style="font-family: 'rabar';" />
+      </div>
+      <select id="sort" class="select">
+        <option value="az">ئـ ← ێ</option>
+        <option value="za">ێ ← ئـ</option>
+      </select>
+      <button id="reload" class="btn">نوێکردنەوە</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="small" id="status">چاوەڕێبە...</div>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="small" style="display:none; padding:16px;">هیچ کتێبێك بەردەست نییە.</div>
+</div>
+
+<script src="app.js"></script>
+<script>
+const file = qs("file");
+const name = qs("name") || "Books";
+document.getElementById("title").textContent = name;
+
+const elGrid = document.getElementById("grid");
+const elEmpty = document.getElementById("empty");
+const elStatus = document.getElementById("status");
+const elSearch = document.getElementById("search");
+const elSort = document.getElementById("sort");
+
+let all = [];
+let filtered = [];
+let page = 0;
+const SIZE = 20;
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+function renderBatch(reset=false){
+  if(reset){
+    elGrid.innerHTML = "";
+    page = 0;
+  }
+
+  const start = page * SIZE;
+  const chunk = filtered.slice(start, start + SIZE);
+  if(!chunk.length) return;
+
+  chunk.forEach(b=>{
+    const realId = all.indexOf(b);
+
+    elGrid.insertAdjacentHTML("beforeend", `
+      <div class="card">
+        <div class="cover" onclick="openBook(${realId})" style="cursor:pointer">
+          <img src="${b.image}"
+               loading="lazy"
+               decoding="async"
+               width="190"
+               height="220"
+               alt="${escapeHtml(b.title)}">
+          <div class="badge">${escapeHtml(name)}</div>
+        </div>
+
+        <div class="meta">
+          <div class="title">${escapeHtml(b.title)}</div>
+          <div class="author">${escapeHtml(b.author)}</div>
+
+          <button class="btn" style="margin-top:8px;width:100%" onclick="openBook(${realId})">
+            بینینی کتێب
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
+  page++;
+}
+
+function apply(){
+  const q = elSearch.value.trim().toLowerCase();
+
+  filtered = all.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    b.author.toLowerCase().includes(q)
+  );
+
+  filtered.sort((a,b)=>{
+    const x=a.title.toLowerCase(), y=b.title.toLowerCase();
+    return elSort.value==="za" ? y.localeCompare(x) : x.localeCompare(y);
+  });
+
+  elEmpty.style.display = filtered.length ? "none" : "block";
+  renderBatch(true);
+}
+
+window.openBook = function(realId){
+  location.href =
+    `book.html?file=${encodeURIComponent(file)}&id=${realId}&name=${encodeURIComponent(name)}`;
+};
+
+window.addEventListener("scroll",()=>{
+  if(window.innerHeight + window.scrollY > document.body.offsetHeight - 300){
+    renderBatch();
+  }
+});
+
+async function load(){
+  elStatus.textContent = "چاوەڕوانبە...";
+  all = await fetchBooks(file);
+  elStatus.textContent = `${all.length} کتێب بەردەستە`;
+  apply();
+}
+
+document.getElementById("reload").onclick = load;
+elSearch.addEventListener("input", apply);
+elSort.addEventListener("change", apply);
+
+load();
+</script>
+<footer class="footer-modern">
+  <div class="footer-wrap">
+
+    <!-- Brand -->
+    <div class="footer-col">
+      <div class="footer-brand">
+        <div class="logo"></div>
+        <span>Xwenar</span>
+      </div>
+      <p class="footer-desc">
+        کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="footer-col">
+      <h4>پەیوەندی</h4>
+      <a href="#">دەربارەی ئێمە</a>
+      <a href="#">یارمەتی</a>
+      <a href="#">سیاسەتی تایبەتی</a>
+      <a href="#">مەرجەکان</a>
+    </div>
+
+    <!-- Stores -->
+    <div class="footer-col">
+      <h4>داگرتن</h4>
+      <div class="store-btns">
+        <a href="#" class="store google">
+          <i class="fab fa-google-play"></i>
+          <span>Play Store</span>
+        </a>
+        <a href="#" class="store apple">
+          <i class="fab fa-apple"></i>
+          <span>App Store</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="footer-col">
+      <h4>شوێنەکانمان</h4>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 Xwenar Library — All rights reserved
+  </div>
+</footer>
+
+</body>
+</html>
