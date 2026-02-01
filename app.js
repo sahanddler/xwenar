@@ -134,10 +134,32 @@ function mapBook(book) {
 }
 
 // ================== FETCH (FAST + CACHED) ==================
-async function fetchBooks(file){
-  const url = BASE + file;
+async function fetchBooks(file, force = false){
+  const cacheKey = "books_cache_" + file;
+  const timeKey  = "books_time_" + file;
+  const TTL = 5 * 60 * 1000; // 5 minutes
+
+  const now = Date.now();
+  const cached = localStorage.getItem(cacheKey);
+  const savedTime = Number(localStorage.getItem(timeKey));
+
+  // ✅ Use cache if valid and not forced
+  if (!force && cached && savedTime && (now - savedTime) < TTL) {
+    return JSON.parse(cached);
+  }
+
+  // 🔄 Fetch fresh data
+  const url = BASE + file + "?r=" + now; // break GitHub cache safely
   const res = await fetch(url, { cache: "no-store" });
+
   if (!res.ok) throw new Error("HTTP " + res.status);
+
   const data = await res.json();
-  return normalizeArray(data).map(mapBook);
+  const books = normalizeArray(data).map(mapBook);
+
+  // 💾 Save cache
+  localStorage.setItem(cacheKey, JSON.stringify(books));
+  localStorage.setItem(timeKey, now);
+
+  return books;
 }
