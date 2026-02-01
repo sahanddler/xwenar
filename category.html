@@ -57,18 +57,13 @@
 <script>
 const file = qs("file");
 const name = qs("name") || "Books";
-document.getElementById("reload").onclick = async ()=>{
-  elStatus.textContent = "نوێکردنەوە";
-  
+
+  document.getElementById("reload").onclick = ()=>{
   all = [];
   filtered = [];
   elGrid.innerHTML = "";
-
-  // 🔥 FORCE refresh (bypass cache)
-  all = await fetchBooks(file, true);
-
-  elStatus.textContent = `${all.length} کتێب بەردەستە`;
-  apply();
+  elStatus.textContent = "نوێکردنەوە";
+  load();   
 };
 
 const elGrid = document.getElementById("grid");
