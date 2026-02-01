@@ -57,10 +57,14 @@ body{
   color:var(--text);
 }
 .logo{
-  width:38px;height:38px;
-  border-radius:12px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  box-shadow: 0 10px 22px rgba(77, 36, 23, 0.25);
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background-image: url("xwenar.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
 }
 .brand span{font-size:16px}
 
