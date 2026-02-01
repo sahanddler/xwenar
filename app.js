@@ -135,14 +135,8 @@ function mapBook(book) {
 
 // ================== FETCH (FAST + CACHED) ==================
 async function fetchBooks(file){
-  const url = BASE + file + "?t=" + Date.now(); // 🔥 force fresh
-  const res = await fetch(url, {
-    cache: "no-store",
-    headers: {
-      "Cache-Control": "no-cache",
-      "Pragma": "no-cache"
-    }
-  });
+  const url = BASE + file;
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error("HTTP " + res.status);
   const data = await res.json();
   return normalizeArray(data).map(mapBook);
