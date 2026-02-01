@@ -57,7 +57,13 @@
 <script>
 const file = qs("file");
 const name = qs("name") || "Books";
-document.getElementById("title").textContent = name;
+document.getElementById("reload").onclick = ()=>{
+  all = [];
+  filtered = [];
+  elGrid.innerHTML = "";
+  elStatus.textContent = "نوێکردنەوە";
+  load();
+};
 
 const elGrid = document.getElementById("grid");
 const elEmpty = document.getElementById("empty");
