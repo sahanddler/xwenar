@@ -101,17 +101,27 @@ function renderBatch(reset=false){
 
   page++;
 }
-
+function bookToText(b){
+  return `
+    ${b.title || ""} 
+    ${b.author || ""} 
+    ${b.category || ""} 
+    ${b.description || ""} 
+    ${b.aboutpdf || ""} 
+    ${b.name || ""}
+  `.toLowerCase();
+}
 function apply(){
   const q = elSearch.value.trim().toLowerCase();
 
-  filtered = all.filter(b =>
-    b.title.toLowerCase().includes(q) ||
-    b.author.toLowerCase().includes(q)
-  );
+  filtered = all.filter(b => {
+    if(!q) return true;
+    return bookToText(b).includes(q);
+  });
 
   filtered.sort((a,b)=>{
-    const x=a.title.toLowerCase(), y=b.title.toLowerCase();
+    const x = (a.title || "").toLowerCase();
+    const y = (b.title || "").toLowerCase();
     return elSort.value==="za" ? y.localeCompare(x) : x.localeCompare(y);
   });
 
