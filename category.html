@@ -58,12 +58,19 @@
 const file = qs("file");
 const name = qs("name") || "Books";
 
-  document.getElementById("reload").onclick = ()=>{
+
+  document.getElementById("reload").onclick = async ()=>{
+  elStatus.textContent = "نوێکردنەوە...";
+  
   all = [];
   filtered = [];
   elGrid.innerHTML = "";
-  elStatus.textContent = "نوێکردنەوە";
-  load();   
+
+  // 🔥 FORCE refresh (bypass cache)
+  all = await fetchBooks(file, true);
+
+  elStatus.textContent = `${all.length} کتێب بەردەستە`;
+  apply();
 };
 
 const elGrid = document.getElementById("grid");
