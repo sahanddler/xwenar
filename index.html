@@ -26,7 +26,11 @@
   <h1> خوێنەر کتێبخانەیەکی ئەلیکترۆنی📚</h1>
   <p>هەزاران کتێب بە ئاسانی بەدەست بێنە</p>
 </div>
-
+    <!-- search -->
+<div class="search-home">
+  <input id="homeSearch" placeholder="گەڕان بۆ هەموو کتێبەکان..." />
+  <div id="searchResults" class="search-results"></div>
+</div>
 <!-- ================= CATEGORIES ================= -->
 <div class="container">
   <div class="section-title">بەشەکان</div>
@@ -126,6 +130,75 @@ async function loadCategories(){
 }
 
 loadCategories();
+    const input = document.getElementById("homeSearch");
+const resultsEl = document.getElementById("searchResults");
+
+let ALL_BOOKS = [];
+
+/* Load ALL books once */
+async function loadAllBooks(){
+  for(const c of CATEGORIES){
+    const books = await fetchBooks(c.file);
+    books.forEach((b,i)=>{
+      ALL_BOOKS.push({
+        ...b,
+        file: c.file,
+        id: i,
+        cat: c.name
+      });
+    });
+  }
+}
+
+function bookText(b){
+  return `
+    ${b.title||""}
+    ${b.author||""}
+    ${b.category||""}
+    ${b.description||""}
+    ${b.aboutpdf||""}
+  `.toLowerCase();
+}
+
+function renderResults(list){
+  if(!list.length){
+    resultsEl.style.display = "none";
+    return;
+  }
+
+  resultsEl.innerHTML = list.slice(0,20).map(b=>`
+    <div class="search-item" onclick="openBook('${b.file}',${b.id},'${b.cat}')">
+      <img src="${b.image}">
+      <div>
+        <div class="t">${b.title}</div>
+        <div class="a">${b.author}</div>
+      </div>
+    </div>
+  `).join("");
+
+  resultsEl.style.display = "block";
+}
+
+window.openBook = function(file,id,name){
+  location.href = `book.html?file=${encodeURIComponent(file)}&id=${id}&name=${encodeURIComponent(name)}`;
+};
+
+let t;
+input.addEventListener("input", ()=>{
+  clearTimeout(t);
+  t = setTimeout(()=>{
+    const q = input.value.trim().toLowerCase();
+    if(!q){
+      resultsEl.style.display = "none";
+      return;
+    }
+
+    const res = ALL_BOOKS.filter(b => bookText(b).includes(q));
+    renderResults(res);
+  }, 200);
+});
+
+loadAllBooks();
 </script>
 
 </body>
