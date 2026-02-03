@@ -233,7 +233,35 @@ input.addEventListener("input", ()=>{
 });
 
 loadAllBooks();
+ /* ===== Authors & Poets ===== */
+const AUTHORS_URL = "https://github.com/sahanddler/json/raw/main/authors.json";
+const POETS_URL   = "https://github.com/sahanddler/json/raw/main/poets.json";
+
+async function openAuthors(){
+  try{
+    const res = await fetch(AUTHORS_URL);
+    const data = await res.json();
+    console.log("Authors:", data);
+    // دواتر: location.href = "authors.html";
+    alert("نوسەرەکان بارکران ✔️ (console بکەوە)");
+  }catch(e){
+    alert("هەڵە لە بارکردنی نوسەرەکان");
+  }
+}
+
+async function openPoets(){
+  try{
+    const res = await fetch(POETS_URL);
+    const data = await res.json();
+    console.log("Poets:", data);
+    // دواتر: location.href = "poets.html";
+    alert("شاعیرەکان بارکران ✔️ (console بکەوە)");
+  }catch(e){
+    alert("هەڵە لە بارکردنی شاعیرەکان");
+  }
+}
 </script>
 
+ 
 </body>
 </html>
