@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>نوسەرەکان | خوێنەر</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <span>✍️ نوسەرەکان</span>
+  </div>
+</div>
+
+<div class="container">
+  <div id="authors" class="people-grid"></div>
+</div>
+
+<script>
+const AUTHORS_URL =
+  "https://github.com/sahanddler/json/raw/main/authors.json";
+
+const wrap = document.getElementById("authors");
+
+async function loadAuthors(){
+  const res = await fetch(AUTHORS_URL);
+  const data = await res.json();
+
+  wrap.innerHTML = data.map(a => `
+    <div class="person-card">
+      <img src="${a.image}" alt="${a.name}">
+      <div class="person-body">
+        <div class="person-name">${a.name}</div>
+        <div class="person-desc">${a.description || ""}</div>
+        <div class="person-meta">
+          📚 ${a.booksCount || 0} کتێب
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+loadAuthors();
+</script>
+
+</body>
+</html>
