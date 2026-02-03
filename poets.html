@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>شاعیرەکان | خوێنەر</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <span>🪶 شاعیرەکان</span>
+  </div>
+</div>
+
+<div class="container">
+  <div id="poets" class="people-grid"></div>
+</div>
+
+<script>
+const POETS_URL =
+  "https://github.com/sahanddler/json/raw/main/poets.json";
+
+const wrap = document.getElementById("poets");
+
+async function loadPoets(){
+  const res = await fetch(POETS_URL);
+  const data = await res.json();
+
+  wrap.innerHTML = data.map(p => `
+    <div class="person-card">
+      <img src="${p.image}" alt="${p.name}">
+      <div class="person-body">
+        <div class="person-name">${p.name}</div>
+        <div class="person-desc">${p.description || ""}</div>
+        <div class="person-meta">
+          ${p.finalname ? "👤 " + p.finalname : ""}
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+loadPoets();
+</script>
+
+</body>
+</html>
