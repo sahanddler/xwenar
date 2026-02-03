@@ -1,3 +1,40 @@
+.home-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin:16px auto 24px;
+  flex-wrap:wrap;
+}
+
+.home-btn{
+  border:none;
+  padding:12px 20px;
+  border-radius:14px;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.2s;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.home-btn.author{
+  background:#2563eb;
+  color:#fff;
+}
+
+.home-btn.poet{
+  background:#9333ea;
+  color:#fff;
+}
+
+.home-btn:hover{
+  transform:translateY(-2px);
+  opacity:.9;
+}
+
 :root{
   --accent:#FF5722;
   --accent2:#ff7a52;
