@@ -3,7 +3,7 @@ const CATEGORIES = [
   { name: "ڕۆمان", file: "roman.json" },
   { name: "چیرۆک", file: "cherok.json" },
   { name: "ئابووری", file: "aburi.json" },
-  { name: "وەرزشی", file: "warzsh.json" },
+  { name: "وەرزشی", file: "warzshi.json" },
   { name: "فەلسەفی", file: "falsafi.json" },
   { name: "ئەدەبی", file: "adabi.json" },
   { name: "مێژوویی", file: "mezhuy.json" },
