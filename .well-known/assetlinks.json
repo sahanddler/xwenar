@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.my.xwenar1",
+      "sha256_cert_fingerprints": [
+        "6C:7E:71:58:94:C4:81:A0:CC:4A:9E:05:27:4F:98:3A:3C:FE:35:D1:59:03:EA:B7:E4:C3:3D:FC:D7:28:D5:16"
+      ]
+    }
+  }
+]
