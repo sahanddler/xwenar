@@ -171,18 +171,28 @@ let ALL_BOOKS = [];
 
 /* Load ALL books once */
 async function loadAllBooks(){
-  for(const c of CATEGORIES){
-    const books = await fetchBooks(c.file);
-    books.forEach((b,i)=>{
-      ALL_BOOKS.push({
+  ALL_BOOKS = [];
+
+  const promises = CATEGORIES.map(async (c)=>{
+    try{
+      const books = await fetchBooks(c.file);
+      return books.map((b,i)=>({
         ...b,
         file: c.file,
         id: i,
         cat: c.name
-      });
-    });
-  }
+      }));
+    }catch(e){
+      console.error("Failed loading:", c.file);
+      return [];
+    }
+  });
+
+  const results = await Promise.all(promises);
+  ALL_BOOKS = results.flat();
+  console.log("Total books loaded:", ALL_BOOKS.length);
 }
+
 
 function bookText(b){
   return `
@@ -232,7 +242,9 @@ input.addEventListener("input", ()=>{
   }, 200);
 });
 
-loadAllBooks();
+loadAllBooks().then(()=>{
+  console.log("All books ready");
+});
  /* ===== Authors & Poets ===== */
 const AUTHORS_URL = "https://github.com/sahanddler/json/raw/main/authors.json";
 const POETS_URL   = "https://github.com/sahanddler/json/raw/main/poets.json";
