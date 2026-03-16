@@ -21,7 +21,6 @@
 </head>
 <body>
 
-  <!-- ================= TOP BAR ================= -->
   <div class="topbar">
     <div class="row">
       <span id="siteTitle">Xwenar - Kurdish Digital Library</span>
@@ -33,19 +32,16 @@
     </div>
   </div>
 
-  <!-- ================= HERO ================= -->
   <div class="hero">
     <h1 id="heroTitle">📚 Xwenar – Kurdish Digital Library</h1>
     <p id="heroDesc">Access thousands of books easily</p>
   </div>
 
-  <!-- ================= SEARCH ================= -->
   <div class="search-home">
     <input id="homeSearch" placeholder="Search books, authors, or categories..." />
     <div id="searchResults" class="search-results"></div>
   </div>
 
-  <!-- ================= ACTION BUTTONS ================= -->
   <div class="home-actions">
     <button class="home-btn author" onclick="location.href='authors.html'">
       <span id="authorsBtn">✍️ Authors</span>
@@ -56,13 +52,11 @@
     </button>
   </div>
 
-  <!-- ================= CATEGORIES ================= -->
   <div class="container">
     <div class="section-title" id="catsTitle">Categories</div>
     <div id="cats" class="cat-grid"></div>
   </div>
 
-  <!-- ================= FOOTER ================= -->
   <footer class="footer-modern">
     <div class="footer-wrap">
 
@@ -77,7 +71,8 @@
       </div>
 
       <div class="footer-col">
-         <a href="about-us.html" id="aboutLink">About Us</a>
+        <h4 id="footerLinksTitle">Links</h4>
+        <a href="about-us.html" id="aboutLink">About Us</a>
         <a href="contact.html" id="contactLink">Contact</a>
         <a href="ku-privacy-policy.html" id="privacyLink">Privacy Policy</a>
       </div>
@@ -131,19 +126,25 @@
     async function loadCategories() {
       let html = "";
 
+      if (!Array.isArray(CATEGORIES) || !CATEGORIES.length) {
+        catsEl.innerHTML = "<div class='small'>No categories found.</div>";
+        return;
+      }
+
       for (const c of CATEGORIES) {
         try {
           const books = await fetchBooks(c.file);
-          const img = books[0]?.image || "";
+          const img = books?.[0]?.image || "";
 
           html += `
             <a class="cat-card" href="category.html?file=${encodeURIComponent(c.file)}&name=${encodeURIComponent(c.name)}">
-              <div class="cat-img" style="background-image:url('${img}')"></div>
+              <div class="cat-img" style="${img ? `background-image:url('${img}')` : "background:#ddd"}"></div>
               <div class="cat-overlay"></div>
               <div class="cat-title">${c.name}</div>
             </a>
           `;
         } catch (e) {
+          console.error("Category load failed:", c.file, e);
           html += `
             <a class="cat-card" href="category.html?file=${encodeURIComponent(c.file)}&name=${encodeURIComponent(c.name)}">
               <div class="cat-img" style="background:#ddd"></div>
@@ -160,17 +161,19 @@
     async function loadAllBooks() {
       ALL_BOOKS = [];
 
+      if (!Array.isArray(CATEGORIES) || !CATEGORIES.length) return;
+
       const promises = CATEGORIES.map(async (c) => {
         try {
           const books = await fetchBooks(c.file);
-          return books.map((b, i) => ({
+          return (books || []).map((b, i) => ({
             ...b,
             file: c.file,
             id: i,
             cat: c.name
           }));
         } catch (e) {
-          console.error("Failed loading:", c.file);
+          console.error("Failed loading:", c.file, e);
           return [];
         }
       });
@@ -197,8 +200,8 @@
       }
 
       resultsEl.innerHTML = list.slice(0, 20).map(b => `
-        <div class="search-item" onclick="openBook('${b.file}', ${b.id}, '${String(b.cat).replace(/'/g, "\\'")}')">
-          <img src="${b.image || ''}" alt="${b.title || 'Book'}">
+        <div class="search-item" onclick="openBook(${JSON.stringify(b.file)}, ${b.id}, ${JSON.stringify(b.cat || "")})">
+          <img src="${b.image || ""}" alt="${b.title || "Book"}">
           <div>
             <div class="t">${b.title || ""}</div>
             <div class="a">${b.author || ""}</div>
@@ -262,7 +265,8 @@
         poetsBtn: "🪶 شاعیرەکان",
         catsTitle: "بەشەکان",
         footerDesc: "کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان",
-         aboutLink: "دەربارەی ئێمە",
+        footerLinksTitle: "پەیوەندی",
+        aboutLink: "دەربارەی ئێمە",
         contactLink: "پەیوەندی",
         privacyLink: "سیاسەتی تایبەتی",
         downloadTitle: "داگرتن",
@@ -300,8 +304,7 @@
       setLanguage(e.target.value);
     });
 
-    // English as primary/default language
-    const savedLang = localStorage.getItem("siteLang");
+    const savedLang = localStorage.getItem("siteLang") || "en";
     setLanguage(savedLang === "ckb" ? "ckb" : "en");
 
     loadCategories();
