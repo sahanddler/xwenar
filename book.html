@@ -1,26 +1,23 @@
- <!doctype html>
-<html lang="ckb" dir="rtl">
- <head>
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- FAVICON (ADD HERE) -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <title>خوێنەر</title>
-  <link rel="stylesheet" href="style.css" />
-    <meta name="description" content="کتێبخانەی دیجیتاڵی کوردی بۆ خوێندن و فێربوون. هەزاران کتێب لە یەک شوێن.">
-<meta name="keywords" content="کتێب، کوردی، خوێندن، PDF، کتاب، Kurdish books">
-<meta name="author" content="Xwenar Library">
-<meta name="robots" content="index, follow">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- 
+  <title>Xwenar</title>
+  <meta name="description" content="Xwenar is a Kurdish digital library for reading and learning. Access thousands of books in one place.">
+  <meta name="keywords" content="Kurdish books, Kurdish library, reading, PDF, books, Xwenar">
+  <meta name="author" content="Xwenar Library">
+  <meta name="robots" content="index, follow">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -31,121 +28,45 @@
       <div class="logo"></div>
       <span id="topTitle">Book</span>
     </div>
-    <div class="actions">
-      <button class="btn" onclick="goBack()">گەڕانەوە</button>
+
+    <div class="actions" style="display:flex; gap:10px; align-items:center;">
+      <button class="btn" id="backBtn" onclick="goBack()">Back</button>
+
+      <select id="langSelect" style="padding:6px 10px; border-radius:8px;">
+        <option value="en" selected>English</option>
+        <option value="ckb">کوردی</option>
+      </select>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <div id="wrap">چاوەڕوانبە...</div>
+  <div id="wrap">Loading...</div>
 </div>
 
-<script src="app.js"></script>
-<script>
-const file = qs("file");
-const id = parseInt(qs("id") || "0", 10);
-const name = qs("name") || "Books";
-document.getElementById("topTitle").textContent = name;
-
-function goBack(){
-  location.href = `category.html?file=${encodeURIComponent(file)}&name=${encodeURIComponent(name)}`;
-}
-
-/* ===== Convert Google Drive link to preview ===== */
-function drivePreview(url){
-  if(!url) return "";
-  if(url.includes("drive.google.com")){
-    const did = getDriveId(url);
-    if(did) return `https://drive.google.com/file/d/${did}/preview`;
-  }
-  return url;
-}
-
-async function load(){
-  const wrap = document.getElementById("wrap");
-
-  try{
-    const books = await fetchBooks(file);
-    const b = books[id];
-
-    if(!b){
-      wrap.innerHTML = "<div class='small'>Book not found</div>";
-      return;
-    }
-
-    /* 🔥 IMPORTANT FIX (this was the bug) */
-    const onlineLink = (b.online && b.online.trim()) ? b.online : "";
-    const preview = drivePreview(onlineLink);
-    const downloadLink = (b.download && b.download.trim()) ? b.download : "";
-
-    wrap.innerHTML = `
-      <div class="details">
-        <div class="img">
-          <img src="${b.image}"
-               loading="lazy"
-               decoding="async"
-               width="320"
-               height="420"
-               alt="${b.title}">
-        </div>
-
-        <div class="info">
-          <div class="h1">${b.title}</div>
-          <div class="small">${b.author}</div>
-
-          ${b.description ? `<div class="desc">${b.description}</div>` : ""}
-
-          <div class="cta">
-            ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">بینینی ئۆنڵاین 📖</a>` : ""}
-            ${downloadLink ? `<a href="${downloadLink}" target="_blank"> داگرتن ⬇️</a>` : ""}
-          </div>
-        </div>
-      </div>
-
-      ${preview ? `
-        <div class="section-title">بینینی ڕاستەوخۆ</div>
-        <div class="viewer">
-          <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
-        </div>
-      ` : ""}
-    `;
-
-  }catch(err){
-    wrap.innerHTML = `<div class="small">Error loading book</div>`;
-    console.error(err);
-  }
-}
-
-load();
-</script>
 <footer class="footer-modern">
   <div class="footer-wrap">
 
-    <!-- Brand -->
     <div class="footer-col">
       <div class="footer-brand">
         <div class="logo"></div>
         <span>Xwenar</span>
       </div>
-      <p class="footer-desc">
-        کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان
+      <p class="footer-desc" id="footerDesc">
+        A digital library for reading, learning, and growth
       </p>
     </div>
 
-    <!-- Links -->
     <div class="footer-col">
-      <h4>پەیوەندی</h4>
-      <a href="about-us.html">دەربارەی ئێمە</a>
-      <a href="contact.html">یارمەتی</a>
-      <a href="ku-privacy-policy.html">سیاسەتی تایبەتی</a>
+      <h4 id="footerLinksTitle">Links</h4>
+      <a href="about-us.html" id="aboutLink">About Us</a>
+      <a href="contact.html" id="contactLink">Help</a>
+      <a href="ku-privacy-policy.html" id="privacyLink">Privacy Policy</a>
     </div>
 
-    <!-- Stores -->
     <div class="footer-col">
-      <h4>داگرتن</h4>
+      <h4 id="downloadTitle">Download</h4>
       <div class="store-btns">
-
         <a href="https://play.google.com/store/apps/details?id=com.my.xwenar1&hl=en-US"
            class="store google" target="_blank" aria-label="Google Play">
           <i class="fab fa-google-play"></i>
@@ -157,15 +78,12 @@ load();
           <i class="fab fa-apple"></i>
           <span>App Store</span>
         </a>
-
       </div>
     </div>
 
-    <!-- Social -->
     <div class="footer-col">
-      <h4>شوێنەکانمان</h4>
+      <h4 id="socialTitle">Follow Us</h4>
       <div class="social-links">
-
         <a href="https://www.facebook.com/Appxwenar"
            target="_blank" aria-label="Facebook">
           <i class="fab fa-facebook-f"></i>
@@ -175,7 +93,6 @@ load();
            target="_blank" aria-label="Telegram">
           <i class="fab fa-telegram-plane"></i>
         </a>
-
       </div>
     </div>
 
@@ -186,6 +103,164 @@ load();
   </div>
 </footer>
 
+<script src="app.js"></script>
+<script>
+const file = qs("file");
+const id = parseInt(qs("id") || "0", 10);
+const rawName = qs("name") || "Books";
+const wrap = document.getElementById("wrap");
+const langSelect = document.getElementById("langSelect");
+
+const translations = {
+  en: {
+    htmlLang: "en",
+    htmlDir: "ltr",
+    pageTitle: "Xwenar",
+    defaultBookName: "Book",
+    loading: "Loading...",
+    backBtn: "Back",
+    notFound: "Book not found",
+    errorLoading: "Error loading book",
+    readOnline: "Read Online 📖",
+    download: "Download ⬇️",
+    livePreview: "Live Preview",
+    footerDesc: "A digital library for reading, learning, and growth",
+    footerLinksTitle: "Links",
+    aboutLink: "About Us",
+    contactLink: "Help",
+    privacyLink: "Privacy Policy",
+    downloadTitle: "Download",
+    socialTitle: "Follow Us"
+  },
+  ckb: {
+    htmlLang: "ckb",
+    htmlDir: "rtl",
+    pageTitle: "خوێنەر",
+    defaultBookName: "کتێب",
+    loading: "چاوەڕوانبە...",
+    backBtn: "گەڕانەوە",
+    notFound: "کتێب نەدۆزرایەوە",
+    errorLoading: "هەڵە لە بارکردنی کتێب",
+    readOnline: "بینینی ئۆنڵاین 📖",
+    download: "داگرتن ⬇️",
+    livePreview: "بینینی ڕاستەوخۆ",
+    footerDesc: "کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان",
+    footerLinksTitle: "پەیوەندی",
+    aboutLink: "دەربارەی ئێمە",
+    contactLink: "یارمەتی",
+    privacyLink: "سیاسەتی تایبەتی",
+    downloadTitle: "داگرتن",
+    socialTitle: "شوێنەکانمان"
+  }
+};
+
+function currentLang() {
+  return localStorage.getItem("siteLang") || "en";
+}
+
+function translatedName() {
+  return rawName || translations[currentLang()].defaultBookName;
+}
+
+function applyLanguage(lang) {
+  const tr = translations[lang] || translations.en;
+
+  document.documentElement.lang = tr.htmlLang;
+  document.documentElement.dir = tr.htmlDir;
+  document.title = tr.pageTitle;
+  document.getElementById("topTitle").textContent = translatedName();
+  document.getElementById("backBtn").textContent = tr.backBtn;
+  document.getElementById("footerDesc").textContent = tr.footerDesc;
+  document.getElementById("footerLinksTitle").textContent = tr.footerLinksTitle;
+  document.getElementById("aboutLink").textContent = tr.aboutLink;
+  document.getElementById("contactLink").textContent = tr.contactLink;
+  document.getElementById("privacyLink").textContent = tr.privacyLink;
+  document.getElementById("downloadTitle").textContent = tr.downloadTitle;
+  document.getElementById("socialTitle").textContent = tr.socialTitle;
+
+  langSelect.value = lang;
+  localStorage.setItem("siteLang", lang);
+}
+
+function goBack() {
+  location.href = `category.html?file=${encodeURIComponent(file)}&name=${encodeURIComponent(rawName)}`;
+}
+
+function drivePreview(url) {
+  if (!url) return "";
+
+  if (url.includes("drive.google.com")) {
+    const did = getDriveId(url);
+    if (did) return `https://drive.google.com/file/d/${did}/preview`;
+  }
+
+  return url;
+}
+
+async function load() {
+  const tr = translations[currentLang()] || translations.en;
+  wrap.innerHTML = tr.loading;
+
+  try {
+    const books = await fetchBooks(file);
+    const b = books[id];
+
+    if (!b) {
+      wrap.innerHTML = `<div class="small">${tr.notFound}</div>`;
+      return;
+    }
+
+    const onlineLink = (b.online && b.online.trim()) ? b.online : "";
+    const preview = drivePreview(onlineLink);
+    const downloadLink = (b.download && b.download.trim()) ? b.download : "";
+
+    wrap.innerHTML = `
+      <div class="details">
+        <div class="img">
+          <img src="${b.image || ""}"
+               loading="lazy"
+               decoding="async"
+               width="320"
+               height="420"
+               alt="${b.title || tr.defaultBookName}">
+        </div>
+
+        <div class="info">
+          <div class="h1">${b.title || ""}</div>
+          <div class="small">${b.author || ""}</div>
+
+          ${b.description ? `<div class="desc">${b.description}</div>` : ""}
+
+          <div class="cta">
+            ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">${tr.readOnline}</a>` : ""}
+            ${downloadLink ? `<a href="${downloadLink}" target="_blank">${tr.download}</a>` : ""}
+          </div>
+        </div>
+      </div>
+
+      ${preview ? `
+        <div class="section-title">${tr.livePreview}</div>
+        <div class="viewer">
+          <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
+        </div>
+      ` : ""}
+    `;
+  } catch (err) {
+    wrap.innerHTML = `<div class="small">${tr.errorLoading}</div>`;
+    console.error(err);
+  }
+}
+
+langSelect.addEventListener("change", (e) => {
+  applyLanguage(e.target.value);
+  load();
+});
+
+/* English is primary/default like index */
+localStorage.setItem("siteLang", "en");
+applyLanguage("en");
+load();
+</script>
 
 </body>
 </html>
