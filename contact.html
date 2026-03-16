@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Contact | Xwenar Library</title>
+<title>Xwenar</title>
 
 <meta name="description" content="Contact Xwenar – Kurdish digital library for reading and learning.">
 <meta name="keywords" content="contact Xwenar, Kurdish books, Kurdish library">
@@ -92,15 +92,6 @@ color:#ff5722;
 font-size:18px;
 }
 
-@media (max-width:600px){
-.contact-wrap{
-margin:20px 12px;
-padding:24px 18px;
-}
-.contact-title{
-font-size:26px;
-}
-}
 </style>
 </head>
 
@@ -109,29 +100,33 @@ font-size:26px;
 <!-- TOP BAR -->
 <div class="topbar">
 <div class="row">
+
 <div class="brand" onclick="location.href='index.html'" style="cursor:pointer;">
 <div class="logo"></div>
-<span>Xwenar</span>
+<span id="brandTitle">Xwenar</span>
+</div>
+
+<select id="langSelect" style="padding:6px 10px;border-radius:8px;">
+<option value="en">English</option>
+<option value="ckb">کوردی</option>
+</select>
+
 </div>
 </div>
-</div>
+
 
 <div class="contact-wrap">
 
-<!-- ENGLISH -->
-<div class="contact-title">Contact Us</div>
+<div class="contact-title" id="contactTitle">Contact Us</div>
 
-<div class="contact-desc">
-If you have any questions, suggestions, or copyright requests,
-you can contact us directly using the information below.
-</div>
+<div class="contact-desc" id="contactDesc"></div>
 
 <div class="contact-box">
 
 <div class="contact-item">
 <div class="contact-icon">📧</div>
 <div>
-<div>Email</div>
+<div id="emailTitle">Email</div>
 <a href="mailto:sahanddlir31@gmail.com">
 sahanddlir31@gmail.com
 </a>
@@ -141,7 +136,7 @@ sahanddlir31@gmail.com
 <div class="contact-item">
 <div class="contact-icon">📞</div>
 <div>
-<div>Phone</div>
+<div id="phoneTitle">Phone</div>
 <a href="tel:+9647512461388">
 <span dir="ltr">+964 751 246 1388</span>
 </a>
@@ -150,53 +145,88 @@ sahanddlir31@gmail.com
 
 </div>
 
-<div class="contact-footer">
-Xwenar — Always with our readers 💙
-</div>
-
-<hr style="margin:40px 0">
-
-<!-- KURDISH VERSION -->
-<div dir="rtl">
-
-<h2 class="contact-title">پەیوەندی</h2>
-
-<p class="contact-desc">
-ئەگەر هەر پرسیارێک، پێشنیارێک یان هەر شتێکت هەیە،
-دەتوانیت ڕاستەوخۆ پەیوەندیمان پێوە بکەیت.
-</p>
-
-<div class="contact-box">
-
-<div class="contact-item">
-<div class="contact-icon">📧</div>
-<div>
-<div>ئیمەیڵ</div>
-<a href="mailto:sahanddlir31@gmail.com">
-sahanddlir31@gmail.com
-</a>
-</div>
-</div>
-
-<div class="contact-item">
-<div class="contact-icon">📞</div>
-<div>
-<div>ژمارەی پەیوەندی</div>
-<a href="tel:+9647512461388">
-<span dir="ltr">+964 751 246 1388</span>
-</a>
-</div>
-</div>
+<div class="contact-footer" id="contactFooter"></div>
 
 </div>
 
-<div class="contact-footer">
-خوێنەر — هەمیشە لەگەڵ ئێوەین 💙
-</div>
 
-</div>
+<script>
 
-</div>
+const langSelect = document.getElementById("langSelect")
+
+const translations = {
+
+en:{
+htmlLang:"en",
+htmlDir:"ltr",
+
+brandTitle:"Xwenar",
+
+contactTitle:"Contact Us",
+
+contactDesc:
+"If you have any questions, suggestions, or copyright requests, you can contact us directly using the information below.",
+
+emailTitle:"Email",
+
+phoneTitle:"Phone",
+
+contactFooter:"Xwenar — Always with our readers 💙"
+},
+
+ckb:{
+htmlLang:"ckb",
+htmlDir:"rtl",
+
+brandTitle:"خوێنەر",
+
+contactTitle:"پەیوەندی",
+
+contactDesc:
+"ئەگەر هەر پرسیارێک، پێشنیارێک یان هەر شتێکت هەیە، دەتوانیت ڕاستەوخۆ پەیوەندیمان پێوە بکەیت.",
+
+emailTitle:"ئیمەیڵ",
+
+phoneTitle:"ژمارەی پەیوەندی",
+
+contactFooter:"خوێنەر — هەمیشە لەگەڵ ئێوەین 💙"
+}
+
+}
+
+
+function setLanguage(lang){
+
+const tr = translations[lang] || translations.en
+
+document.documentElement.lang = tr.htmlLang
+document.documentElement.dir = tr.htmlDir
+
+document.getElementById("brandTitle").innerText = tr.brandTitle
+
+document.getElementById("contactTitle").innerText = tr.contactTitle
+document.getElementById("contactDesc").innerText = tr.contactDesc
+
+document.getElementById("emailTitle").innerText = tr.emailTitle
+document.getElementById("phoneTitle").innerText = tr.phoneTitle
+
+document.getElementById("contactFooter").innerText = tr.contactFooter
+
+localStorage.setItem("siteLang",lang)
+
+langSelect.value = lang
+}
+
+
+langSelect.addEventListener("change",(e)=>{
+setLanguage(e.target.value)
+})
+
+const savedLang = localStorage.getItem("siteLang") || "en"
+
+setLanguage(savedLang)
+
+</script>
 
 </body>
 </html>
