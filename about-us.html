@@ -1,177 +1,171 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xwenar</title>
 
-<title>About Us | Xwenar Library</title>
+  <meta name="description" content="Xwenar is a Kurdish digital library for reading and learning.">
+  <meta name="keywords" content="Xwenar, Kurdish library, Kurdish books, reading">
+  <meta name="author" content="Xwenar Library">
 
-<meta name="description" content="About Xwenar – A Kurdish digital library for reading and learning.">
-<meta name="keywords" content="Xwenar, Kurdish library, Kurdish books, about Xwenar">
-<meta name="author" content="Xwenar Library">
+  <link rel="stylesheet" href="style.css" />
 
-<link rel="stylesheet" href="style.css" />
+  <style>
+    body{
+      background:#fff7f8;
+      line-height:2;
+    }
 
-<style>
-body{
-background:#fff7f8;
-line-height:2;
-}
+    .about-wrap{
+      max-width:900px;
+      margin:40px auto;
+      background:#ffffff;
+      border-radius:20px;
+      padding:32px 28px;
+      box-shadow:0 15px 40px rgba(0,0,0,.08);
+    }
 
-.about-wrap{
-max-width:900px;
-margin:40px auto;
-background:#ffffff;
-border-radius:20px;
-padding:32px 28px;
-box-shadow:0 15px 40px rgba(0,0,0,.08);
-}
+    .about-title{
+      text-align:center;
+      font-size:32px;
+      font-weight:900;
+      color:#ff5722;
+      margin-bottom:24px;
+    }
 
-.about-title{
-text-align:center;
-font-size:32px;
-font-weight:900;
-color:#ff5722;
-margin-bottom:24px;
-}
+    .about-text{
+      font-size:17px;
+      color:#1f2937;
+      text-align:justify;
+    }
 
-.about-text{
-font-size:17px;
-color:#1f2937;
-text-align:justify;
-}
+    .about-text p{
+      margin-bottom:18px;
+    }
 
-.about-text p{
-margin-bottom:18px;
-}
+    .about-highlight{
+      background:#fff1ec;
+      padding:16px 18px;
+      border-radius:14px;
+      margin:22px 0;
+      font-weight:700;
+      border-inline-start:6px solid #ff5722;
+    }
 
-.about-highlight{
-background:#fff1ec;
-border-left:6px solid #ff5722;
-padding:16px 18px;
-border-radius:14px;
-margin:22px 0;
-font-weight:700;
-}
+    .about-footer{
+      margin-top:32px;
+      text-align:center;
+      font-weight:800;
+      color:#ff5722;
+      font-size:18px;
+    }
 
-.about-footer{
-margin-top:32px;
-text-align:center;
-font-weight:800;
-color:#ff5722;
-font-size:18px;
-}
-
-@media (max-width:600px){
-.about-wrap{
-margin:20px 12px;
-padding:24px 18px;
-}
-.about-title{
-font-size:26px;
-}
-}
-</style>
+    @media (max-width:600px){
+      .about-wrap{
+        margin:20px 12px;
+        padding:24px 18px;
+      }
+      .about-title{
+        font-size:26px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="topbar">
-<div class="row">
-<div class="brand" onclick="location.href='index.html'" style="cursor:pointer;">
-<div class="logo"></div>
-<span>Xwenar</span>
-</div>
-</div>
+  <div class="row">
+    <div class="brand" onclick="location.href='index.html'" style="cursor:pointer;">
+      <div class="logo"></div>
+      <span id="brandTitle">Xwenar</span>
+    </div>
+
+    <div class="actions" style="display:flex; gap:10px; align-items:center;">
+      <select id="langSelect" style="padding:6px 10px; border-radius:8px;">
+        <option value="en" selected>English</option>
+        <option value="ckb">کوردی</option>
+      </select>
+    </div>
+  </div>
 </div>
 
 <div class="about-wrap">
+  <div class="about-title" id="aboutTitle">About Us</div>
 
-<!-- English Section -->
-<div class="about-title">About Us</div>
+  <div class="about-text">
+    <p id="p1"></p>
 
-<div class="about-text">
+    <div class="about-highlight" id="highlight"></div>
 
-<p>
-<strong>Xwenar</strong> is a Kurdish digital library project launched on
-<strong>19/9/2022</strong>.  
-The platform provides access to many different types of books across
-<strong>20+ categories</strong> to make reading easier and more accessible for everyone.
-</p>
+    <p id="p2"></p>
+    <p id="p3"></p>
+    <p id="p4"></p>
+  </div>
 
-<div class="about-highlight">
-The main goal of Xwenar is to promote reading culture in Kurdish society
-through an easy, modern, and accessible digital platform.
+  <div class="about-footer" id="aboutFooter"></div>
 </div>
 
-<p>
-As an electronic library, Xwenar aims to make reading an enjoyable
-experience. The platform provides many books and learning resources
-freely for readers.
-</p>
+<script>
+  const langSelect = document.getElementById("langSelect");
 
-<p>
-We believe reading is the foundation of knowledge and the development
-of society. Xwenar continues to expand and improve to provide better
-services for readers.
-</p>
+  const translations = {
+    en: {
+      htmlLang: "en",
+      htmlDir: "ltr",
+      title: "About Us | Xwenar",
+      brandTitle: "Xwenar",
+      aboutTitle: "About Us",
+      p1: `<strong>Xwenar</strong> is a project launched on <strong>19/9/2022</strong>, and it continues to grow with many unique and modern features. This project includes many different books in more than <strong>20 categories</strong>, so reading can become accessible to everyone.`,
+      highlight: `The main goal of Xwenar is to promote the culture of reading in Kurdish society in an easy, fast, and modern way.`,
+      p2: `As a digital library, Xwenar tries to make reading a pleasant and encouraging experience. In a free and simple way, we have made many books and important resources available.`,
+      p3: `Thankfully, until now we have played a good role in making books easier to access. We believe that reading is the foundation of society’s growth.`,
+      p4: `We continue to improve Xwenar and provide the best service possible. We hope you will also support us in developing this project.`,
+      aboutFooter: `Xwenar — For reading, learning, and growth 📚`
+    },
+    ckb: {
+      htmlLang: "ckb",
+      htmlDir: "rtl",
+      title: "دەربارەی ئێمە | خوێنەر",
+      brandTitle: "خوێنەر",
+      aboutTitle: "دەربارەی ئێمە",
+      p1: `<strong>خوێنەر</strong> پڕۆژەیەکە کە لە <strong>19/9/2022</strong> بڵاو کراوەتەوە، و هەتا ئێستا بەردەوامە بە چەندان تایبەتمەندی ناوازە و نوێ. ئەم پڕۆژەیە پێکهاتووە لە چەندەها کتێبی جۆراوجۆر، زیاتر لە <strong>20 جۆری جیاواز</strong>، بۆ ئەوەی خوێندنەوە بگاتە دەست هەمووان.`,
+      highlight: `ئامانجی سەرەکی خوێنەر بریتییە لە بەرزکردنەوەی کلتووری خوێندنەوە لە کۆمەڵگەی کوردیدا، بە شێوەیەکی ئاسان، خێرا و مۆدێرن.`,
+      p2: `خوێنەر وەک کتێبخانەیەکی ئەلیکترۆنی، هەوڵ دەدات خوێندن بگۆڕێت بۆ ئەزموونێکی خۆش و هاندەرانە. بە شێوازی خۆڕایی، ئێمە چەندان کتێب و سەرچاوەی گرنگمان بەردەست خستووە.`,
+      p3: `سوپاس بۆ خوا، هەتا ئێستا ڕۆڵێکی باشمان هەبووە لە ئاسانکاری بۆ دەستخستنی کتێبەکان، ئێمە باوەڕمان وایە خوێندنەوە بنچینەی گەشەی کۆمەڵگەیە.`,
+      p4: `ئێمە بەردەوام دەبین لە پەرەپێدانی خوێنەر، بە باشترین خزمەتگوزاری. هیوادارین ئێوەش هاوکارمان بن بۆ گەشەپێدانی ئەم پڕۆژەیە.`,
+      aboutFooter: `خوێنەر — بۆ خوێندن، فێربوون و گەشەپێدان 📚`
+    }
+  };
 
-<p>
-We hope our readers support this project and help us grow this digital
-library for the Kurdish community.
-</p>
+  function setLanguage(lang) {
+    const tr = translations[lang] || translations.en;
 
-</div>
+    document.documentElement.lang = tr.htmlLang;
+    document.documentElement.dir = tr.htmlDir;
+    document.title = tr.title;
 
-<hr style="margin:40px 0">
+    document.getElementById("brandTitle").textContent = tr.brandTitle;
+    document.getElementById("aboutTitle").textContent = tr.aboutTitle;
+    document.getElementById("p1").innerHTML = tr.p1;
+    document.getElementById("highlight").textContent = tr.highlight;
+    document.getElementById("p2").textContent = tr.p2;
+    document.getElementById("p3").textContent = tr.p3;
+    document.getElementById("p4").textContent = tr.p4;
+    document.getElementById("aboutFooter").textContent = tr.aboutFooter;
 
-<!-- Kurdish Section -->
-<div dir="rtl">
+    localStorage.setItem("siteLang", lang);
+    langSelect.value = lang;
+  }
 
-<div class="about-title">دەربارەی ئێمە</div>
+  langSelect.addEventListener("change", (e) => {
+    setLanguage(e.target.value);
+  });
 
-<div class="about-text">
-
-<p>
-<strong>خوێنەر</strong> پڕۆژەیەکە کە لە <strong>19/9/2022</strong> بڵاو کراوەتەوە،
-و هەتا ئێستا بەردەوامە بە چەندان تایبەتمەندی ناوازە و نوێ.
-ئەم پڕۆژەیە پێکهاتووە لە چەندەها کتێبی جۆراوجۆر، زیاتر لە
-<strong>20 جۆری جیاواز</strong>، بۆ ئەوەی خوێندنەوە بگاتە دەست هەمووان.
-</p>
-
-<div class="about-highlight">
-ئامانجی سەرەکی خوێنەر بریتییە لە بەرزکردنەوەی کلتووری خوێندنەوە
-لە کۆمەڵگەی کوردیدا، بە شێوەیەکی ئاسان، خێرا و مۆدێرن.
-</div>
-
-<p>
-خوێنەر وەک کتێبخانەیەکی ئەلیکترۆنی، هەوڵ دەدات خوێندن
-بگۆڕێت بۆ ئەزموونێکی خۆش و هاندەرانە.
-بە شێوازی خۆڕایی، ئێمە چەندان کتێب و
-سەرچاوەی گرنگمان بەردەست خستووە.
-</p>
-
-<p>
-سوپاس بۆ خوا، هەتا ئێستا ڕۆڵێکی باشمان هەبووە لە
-ئاسانکاری بۆ دەستخستنی کتێبەکان،
-ئێمە باوەڕمان وایە خوێندنەوە بنچینەی گەشەی کۆمەڵگەیە.
-</p>
-
-<p>
-ئێمە بەردەوام دەبین لە پەرەپێدانی خوێنەر،
-بە باشترین خزمەتگوزاری
-هیوایدارین ئێوەش هاوکارمان بن بۆ گەشەپێدانی ئەم پڕۆژەیە.
-</p>
-
-</div>
-
-</div>
-
-<div class="about-footer">
-Xwenar — For reading, learning, and growth 📚
-</div>
-
-</div>
+  const savedLang = localStorage.getItem("siteLang") || "en";
+  setLanguage(savedLang);
+</script>
 
 </body>
 </html>
