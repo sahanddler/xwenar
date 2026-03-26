@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+ <head>
+    <meta name="description" content="کتێبخانەی دیجیتاڵی کوردی بۆ خوێندن و فێربوون. هەزاران کتێب لە یەک شوێن.">
+<meta name="keywords" content="کتێب، کوردی، خوێندن، PDF، کتاب، Kurdish books">
+<meta name="author" content="Xwenar Library">
+<meta name="robots" content="index, follow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="topbar">
+  <div class="row">
+    <div class="brand" onclick="goBack()" style="cursor:pointer;">
+      <div class="logo"></div>
+      <span id="topTitle">Book</span>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="goBack()">گەڕانەوە</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="wrap">چاوەڕوانبە...</div>
+</div>
+
+<script src="app.js"></script>
+<script>
+const file = qs("file");
+const id = parseInt(qs("id") || "0", 10);
+const name = qs("name") || "Books";
+document.getElementById("topTitle").textContent = name;
+
+function goBack(){
+  location.href = `category.html?file=${encodeURIComponent(file)}&name=${encodeURIComponent(name)}`;
+}
+
+/* ===== Convert Google Drive link to preview ===== */
+function drivePreview(url){
+  if(!url) return "";
+  if(url.includes("drive.google.com")){
+    const did = getDriveId(url);
+    if(did) return `https://drive.google.com/file/d/${did}/preview`;
+  }
+  return url;
+}
+
+async function load(){
+  const wrap = document.getElementById("wrap");
+
+  try{
+    const books = await fetchBooks(file);
+    const b = books[id];
+
+    if(!b){
+      wrap.innerHTML = "<div class='small'>Book not found</div>";
+      return;
+    }
+
+    /* 🔥 IMPORTANT FIX (this was the bug) */
+    const onlineLink = (b.online && b.online.trim()) ? b.online : "";
+    const preview = drivePreview(onlineLink);
+    const downloadLink = (b.download && b.download.trim()) ? b.download : "";
+
+    wrap.innerHTML = `
+      <div class="details">
+        <div class="img">
+          <img src="${b.image}"
+               loading="lazy"
+               decoding="async"
+               width="320"
+               height="420"
+               alt="${b.title}">
+        </div>
+
+        <div class="info">
+          <div class="h1">${b.title}</div>
+          <div class="small">${b.author}</div>
+
+          ${b.description ? `<div class="desc">${b.description}</div>` : ""}
+
+          <div class="cta">
+            ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">بینینی ئۆنڵاین 📖</a>` : ""}
+            ${downloadLink ? `<a href="${downloadLink}" target="_blank"> داگرتن ⬇️</a>` : ""}
+          </div>
+        </div>
+      </div>
+
+      ${preview ? `
+        <div class="section-title">بینینی ڕاستەوخۆ</div>
+        <div class="viewer">
+          <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
+        </div>
+      ` : ""}
+    `;
+
+  }catch(err){
+    wrap.innerHTML = `<div class="small">Error loading book</div>`;
+    console.error(err);
+  }
+}
+
+load();
+</script>
+<footer class="footer-modern">
+  <div class="footer-wrap">
+
+    <!-- Brand -->
+    <div class="footer-col">
+      <div class="footer-brand">
+        <div class="logo"></div>
+        <span>Xwenar</span>
+      </div>
+      <p class="footer-desc">
+        کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="footer-col">
+      <h4>پەیوەندی</h4>
+      <a href="#">دەربارەی ئێمە</a>
+      <a href="#">یارمەتی</a>
+      <a href="#">سیاسەتی تایبەتی</a>
+      <a href="#">مەرجەکان</a>
+    </div>
+
+    <!-- Stores -->
+    <div class="footer-col">
+      <h4>داگرتن</h4>
+      <div class="store-btns">
+        <a href="#" class="store google">
+          <i class="fab fa-google-play"></i>
+          <span>Play Store</span>
+        </a>
+        <a href="#" class="store apple">
+          <i class="fab fa-apple"></i>
+          <span>App Store</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="footer-col">
+      <h4>شوێنەکانمان</h4>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 Xwenar Library — All rights reserved
+  </div>
+</footer>
+
+</body>
+</html>
