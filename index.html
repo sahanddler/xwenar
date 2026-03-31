@@ -24,11 +24,6 @@
   <div class="topbar">
     <div class="row">
       <span id="siteTitle">Xwenar - Kurdish Digital Library</span>
-
-      <select id="langSelect" style="margin-inline-start:10px; padding:6px 10px; border-radius:8px;">
-        <option value="en">English</option>
-        <option value="ckb">کوردی</option>
-      </select>
     </div>
   </div>
 
@@ -119,7 +114,6 @@
     const catsEl = document.getElementById("cats");
     const input = document.getElementById("homeSearch");
     const resultsEl = document.getElementById("searchResults");
-    const langSelect = document.getElementById("langSelect");
 
     let ALL_BOOKS = [];
 
@@ -232,80 +226,6 @@
         renderResults(res);
       }, 200);
     });
-
-    const translations = {
-      en: {
-        htmlLang: "en",
-        htmlDir: "ltr",
-        title: "Xwenar",
-        siteTitle: "Xwenar - Kurdish Digital Library",
-        heroTitle: "📚 Xwenar – Kurdish Digital Library",
-        heroDesc: "Access thousands of books easily",
-        searchPlaceholder: "Search books, authors, or categories...",
-        authorsBtn: "✍️ Authors",
-        poetsBtn: "🪶 Poets",
-        catsTitle: "Categories",
-        footerDesc: "A digital library for reading, learning, and growth",
-        footerLinksTitle: "Links",
-        aboutLink: "About Us",
-        contactLink: "Contact",
-        privacyLink: "Privacy Policy",
-        downloadTitle: "Download",
-        socialTitle: "Follow Us"
-      },
-      ckb: {
-        htmlLang: "ckb",
-        htmlDir: "rtl",
-        title: "خوێنەر",
-        siteTitle: "Xwenar - خوێنەر",
-        heroTitle: "خوێنەر کتێبخانەیەکی ئەلیکترۆنی 📚",
-        heroDesc: "هەزاران کتێب بە ئاسانی بەدەست بێنە",
-        searchPlaceholder: "گەڕان بۆ کتێب، نووسەر یان بەش...",
-        authorsBtn: "✍️ نووسەرەکان",
-        poetsBtn: "🪶 شاعیرەکان",
-        catsTitle: "بەشەکان",
-        footerDesc: "کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان",
-        footerLinksTitle: "پەیوەندی",
-        aboutLink: "دەربارەی ئێمە",
-        contactLink: "پەیوەندی",
-        privacyLink: "سیاسەتی تایبەتی",
-        downloadTitle: "داگرتن",
-        socialTitle: "شوێنەکانمان"
-      }
-    };
-
-    function setLanguage(lang) {
-      const tr = translations[lang] || translations.en;
-
-      document.documentElement.lang = tr.htmlLang;
-      document.documentElement.dir = tr.htmlDir;
-      document.title = tr.title;
-
-      document.getElementById("siteTitle").innerText = tr.siteTitle;
-      document.getElementById("heroTitle").innerText = tr.heroTitle;
-      document.getElementById("heroDesc").innerText = tr.heroDesc;
-      document.getElementById("homeSearch").placeholder = tr.searchPlaceholder;
-      document.getElementById("authorsBtn").innerText = tr.authorsBtn;
-      document.getElementById("poetsBtn").innerText = tr.poetsBtn;
-      document.getElementById("catsTitle").innerText = tr.catsTitle;
-      document.getElementById("footerDesc").innerText = tr.footerDesc;
-      document.getElementById("footerLinksTitle").innerText = tr.footerLinksTitle;
-      document.getElementById("aboutLink").innerText = tr.aboutLink;
-      document.getElementById("contactLink").innerText = tr.contactLink;
-      document.getElementById("privacyLink").innerText = tr.privacyLink;
-      document.getElementById("downloadTitle").innerText = tr.downloadTitle;
-      document.getElementById("socialTitle").innerText = tr.socialTitle;
-
-      localStorage.setItem("siteLang", lang);
-      langSelect.value = lang;
-    }
-
-    langSelect.addEventListener("change", (e) => {
-      setLanguage(e.target.value);
-    });
-
-    const savedLang = localStorage.getItem("siteLang") || "en";
-    setLanguage(savedLang === "ckb" ? "ckb" : "en");
 
     loadCategories();
     loadAllBooks();
