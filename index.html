@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ckb" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,10 +10,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <title>Xwenar</title>
-  <meta name="description" content="Xwenar is a Kurdish digital library for reading and learning. Access thousands of books in one place.">
-  <meta name="keywords" content="Kurdish books, Kurdish library, reading, PDF, books, Xwenar">
-  <meta name="author" content="Xwenar Library">
+  <title>خوێنەر</title>
+  <meta name="description" content="خوێنەر کتێبخانەیەکی کوردی بۆ خوێندن و فێربوون. هەزاران کتێب لە یەک شوێن بەدەست بێنە.">
+  <meta name="keywords" content="کتێب کوردی، کتێبخانە کوردی، خوێندن، PDF، کتێب، خوێنەر">
+  <meta name="author" content="کتێبخانەی خوێنەر">
   <meta name="robots" content="index, follow">
 
   <link rel="stylesheet" href="style.css" />
@@ -23,32 +23,22 @@
 
   <div class="topbar">
     <div class="row">
-      <span id="siteTitle">Xwenar - Kurdish Digital Library</span>
+      <span id="siteTitle">خوێنەر - کتێبخانەیەکی کوردی</span>
     </div>
   </div>
 
   <div class="hero">
-    <h1 id="heroTitle">📚 Xwenar – Kurdish Digital Library</h1>
-    <p id="heroDesc">Access thousands of books easily</p>
+    <h1 id="heroTitle">خوێنەر کتێبخانەیەکی ئەلیکترۆنی 📚</h1>
+    <p id="heroDesc">هەزاران کتێب بە ئاسانی بەدەست بێنە</p>
   </div>
 
   <div class="search-home">
-    <input id="homeSearch" placeholder="Search books, authors, or categories..." />
+    <input id="homeSearch" placeholder="گەڕان بۆ کتێب، نووسەر یان بەش..." />
     <div id="searchResults" class="search-results"></div>
   </div>
 
-  <div class="home-actions">
-    <button class="home-btn author" onclick="location.href='authors.html'">
-      <span id="authorsBtn">✍️ Authors</span>
-    </button>
-
-    <button class="home-btn poet" onclick="location.href='poets.html'">
-      <span id="poetsBtn">🪶 Poets</span>
-    </button>
-  </div>
-
   <div class="container">
-    <div class="section-title" id="catsTitle">Categories</div>
+    <div class="section-title" id="catsTitle">بەشەکان</div>
     <div id="cats" class="cat-grid"></div>
   </div>
 
@@ -58,22 +48,22 @@
       <div class="footer-col">
         <div class="footer-brand">
           <div class="logo"></div>
-          <span>Xwenar</span>
+          <span>خوێنەر</span>
         </div>
         <p class="footer-desc" id="footerDesc">
-          A digital library for reading, learning, and growth
+          کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان
         </p>
       </div>
 
       <div class="footer-col">
-        <h4 id="footerLinksTitle">Links</h4>
-        <a href="about-us.html" id="aboutLink">About Us</a>
-        <a href="contact.html" id="contactLink">Contact</a>
-        <a href="ku-privacy-policy.html" id="privacyLink">Privacy Policy</a>
+        <h4 id="footerLinksTitle">پەیوەندی</h4>
+        <a href="about-us.html" id="aboutLink">دەربارەی ئێمە</a>
+        <a href="contact.html" id="contactLink">پەیوەندی</a>
+        <a href="ku-privacy-policy.html" id="privacyLink">سیاسەتی تایبەتی</a>
       </div>
 
       <div class="footer-col">
-        <h4 id="downloadTitle">Download</h4>
+        <h4 id="downloadTitle">داگرتن</h4>
         <div class="store-btns">
           <a href="https://play.google.com/store/apps/details?id=com.my.xwenar1&hl=en-US"
              class="store google" target="_blank" aria-label="Google Play">
@@ -90,7 +80,7 @@
       </div>
 
       <div class="footer-col">
-        <h4 id="socialTitle">Follow Us</h4>
+        <h4 id="socialTitle">شوێنەکانمان</h4>
         <div class="social-links">
           <a href="https://www.facebook.com/Appxwenar" target="_blank" aria-label="Facebook">
             <i class="fab fa-facebook-f"></i>
@@ -105,7 +95,7 @@
     </div>
 
     <div class="footer-bottom">
-      © 2026 Xwenar Library — All rights reserved
+      © 2026 کتێبخانەی خوێنەر — هەموو مافەکان پارێزراون
     </div>
   </footer>
 
@@ -121,7 +111,7 @@
       let html = "";
 
       if (!Array.isArray(CATEGORIES) || !CATEGORIES.length) {
-        catsEl.innerHTML = "<div class='small'>No categories found.</div>";
+        catsEl.innerHTML = "<div class='small'>هیچ بەشێک نەدۆزرایەوە.</div>";
         return;
       }
 
@@ -195,7 +185,7 @@
 
       resultsEl.innerHTML = list.slice(0, 20).map(b => `
         <div class="search-item" onclick="openBook(${JSON.stringify(b.file)}, ${b.id}, ${JSON.stringify(b.cat || "")})">
-          <img src="${b.image || ""}" alt="${b.title || "Book"}">
+          <img src="${b.image || ""}" alt="${b.title || "کتێب"}">
           <div>
             <div class="t">${b.title || ""}</div>
             <div class="a">${b.author || ""}</div>
