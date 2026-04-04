@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ckb" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +12,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <title>Xwenar</title>
-  <meta name="description" content="Xwenar is a Kurdish digital library for reading and learning. Access thousands of books in one place.">
-  <meta name="keywords" content="Kurdish books, Kurdish library, reading, PDF, books, Xwenar">
+  <title>خوێنەر</title>
+  <meta name="description" content="کتێبخانەیەکی دیجیتاڵی کوردی بۆ خوێندن و فێربوون">
+  <meta name="keywords" content="کتێب کوردی, خوێندن, PDF, Xwenar">
   <meta name="author" content="Xwenar Library">
   <meta name="robots" content="index, follow">
 
@@ -26,22 +26,17 @@
   <div class="row">
     <div class="brand" onclick="goBack()" style="cursor:pointer;">
       <div class="logo"></div>
-      <span id="topTitle">Book</span>
+      <span id="topTitle">کتێب</span>
     </div>
 
     <div class="actions" style="display:flex; gap:10px; align-items:center;">
-      <button class="btn" id="backBtn" onclick="goBack()">Back</button>
-
-      <select id="langSelect" style="padding:6px 10px; border-radius:8px;">
-        <option value="en" selected>English</option>
-        <option value="ckb">کوردی</option>
-      </select>
+      <button class="btn" id="backBtn" onclick="goBack()">گەڕانەوە</button>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <div id="wrap">Loading...</div>
+  <div id="wrap">چاوەڕوانبە...</div>
 </div>
 
 <footer class="footer-modern">
@@ -52,29 +47,29 @@
         <div class="logo"></div>
         <span>Xwenar</span>
       </div>
-      <p class="footer-desc" id="footerDesc">
-        A digital library for reading, learning, and growth
+      <p class="footer-desc">
+        کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان
       </p>
     </div>
 
     <div class="footer-col">
-      <h4 id="footerLinksTitle">Links</h4>
-      <a href="about-us.html" id="aboutLink">About Us</a>
-      <a href="contact.html" id="contactLink">Help</a>
-      <a href="ku-privacy-policy.html" id="privacyLink">Privacy Policy</a>
+      <h4>پەیوەندی</h4>
+      <a href="about-us.html">دەربارەی ئێمە</a>
+      <a href="contact.html">یارمەتی</a>
+      <a href="ku-privacy-policy.html">سیاسەتی تایبەتی</a>
     </div>
 
     <div class="footer-col">
-      <h4 id="downloadTitle">Download</h4>
+      <h4>داگرتن</h4>
       <div class="store-btns">
         <a href="https://play.google.com/store/apps/details?id=com.my.xwenar1&hl=en-US"
-           class="store google" target="_blank" aria-label="Google Play">
+           class="store google" target="_blank">
           <i class="fab fa-google-play"></i>
           <span>Play Store</span>
         </a>
 
         <a href="https://apps.apple.com/us/app/xwenar/id6751713873"
-           class="store apple" target="_blank" aria-label="App Store">
+           class="store apple" target="_blank">
           <i class="fab fa-apple"></i>
           <span>App Store</span>
         </a>
@@ -82,15 +77,13 @@
     </div>
 
     <div class="footer-col">
-      <h4 id="socialTitle">Follow Us</h4>
+      <h4>شوێنەکانمان</h4>
       <div class="social-links">
-        <a href="https://www.facebook.com/Appxwenar"
-           target="_blank" aria-label="Facebook">
+        <a href="https://www.facebook.com/Appxwenar" target="_blank">
           <i class="fab fa-facebook-f"></i>
         </a>
 
-        <a href="https://t.me/sahand_dler"
-           target="_blank" aria-label="Telegram">
+        <a href="https://t.me/sahand_dler" target="_blank">
           <i class="fab fa-telegram-plane"></i>
         </a>
       </div>
@@ -107,80 +100,8 @@
 <script>
 const file = qs("file");
 const id = parseInt(qs("id") || "0", 10);
-const rawName = qs("name") || "Books";
+const rawName = qs("name") || "کتێب";
 const wrap = document.getElementById("wrap");
-const langSelect = document.getElementById("langSelect");
-
-const translations = {
-  en: {
-    htmlLang: "en",
-    htmlDir: "ltr",
-    pageTitle: "Xwenar",
-    defaultBookName: "Book",
-    loading: "Loading...",
-    backBtn: "Back",
-    notFound: "Book not found",
-    errorLoading: "Error loading book",
-    readOnline: "Read Online 📖",
-    download: "Download ⬇️",
-    livePreview: "Live Preview",
-    footerDesc: "A digital library for reading, learning, and growth",
-    footerLinksTitle: "Links",
-    aboutLink: "About Us",
-    contactLink: "Help",
-    privacyLink: "Privacy Policy",
-    downloadTitle: "Download",
-    socialTitle: "Follow Us"
-  },
-  ckb: {
-    htmlLang: "ckb",
-    htmlDir: "rtl",
-    pageTitle: "خوێنەر",
-    defaultBookName: "کتێب",
-    loading: "چاوەڕوانبە...",
-    backBtn: "گەڕانەوە",
-    notFound: "کتێب نەدۆزرایەوە",
-    errorLoading: "هەڵە لە بارکردنی کتێب",
-    readOnline: "بینینی ئۆنڵاین 📖",
-    download: "داگرتن ⬇️",
-    livePreview: "بینینی ڕاستەوخۆ",
-    footerDesc: "کتێبخانەیەکی دیجیتاڵی بۆ خوێندن، فێربوون و گەشەپێدان",
-    footerLinksTitle: "پەیوەندی",
-    aboutLink: "دەربارەی ئێمە",
-    contactLink: "یارمەتی",
-    privacyLink: "سیاسەتی تایبەتی",
-    downloadTitle: "داگرتن",
-    socialTitle: "شوێنەکانمان"
-  }
-};
-
-function currentLang() {
-  return localStorage.getItem("siteLang") || "en";
-}
-
-function translatedName() {
-  return rawName || translations[currentLang()].defaultBookName;
-}
-
-function applyLanguage(lang) {
-  const tr = translations[lang] || translations.en;
-
-  document.documentElement.lang = tr.htmlLang;
-  document.documentElement.dir = tr.htmlDir;
-  document.title = tr.pageTitle;
-  document.getElementById("topTitle").textContent = translatedName();
-  document.getElementById("backBtn").textContent = tr.backBtn;
-  document.getElementById("footerDesc").textContent = tr.footerDesc;
-  document.getElementById("footerLinksTitle").textContent = tr.footerLinksTitle;
-  document.getElementById("aboutLink").textContent = tr.aboutLink;
-  document.getElementById("contactLink").textContent = tr.contactLink;
-  document.getElementById("privacyLink").textContent = tr.privacyLink;
-  document.getElementById("downloadTitle").textContent = tr.downloadTitle;
-  document.getElementById("socialTitle").textContent = tr.socialTitle;
-
-  langSelect.value = lang;
-  localStorage.setItem("siteLang", lang);
-}
 
 function goBack() {
   location.href = `category.html?file=${encodeURIComponent(file)}&name=${encodeURIComponent(rawName)}`;
@@ -198,15 +119,14 @@ function drivePreview(url) {
 }
 
 async function load() {
-  const tr = translations[currentLang()] || translations.en;
-  wrap.innerHTML = tr.loading;
+  wrap.innerHTML = "چاوەڕوانبە...";
 
   try {
     const books = await fetchBooks(file);
     const b = books[id];
 
     if (!b) {
-      wrap.innerHTML = `<div class="small">${tr.notFound}</div>`;
+      wrap.innerHTML = `<div class="small">کتێب نەدۆزرایەوە</div>`;
       return;
     }
 
@@ -219,10 +139,9 @@ async function load() {
         <div class="img">
           <img src="${b.image || ""}"
                loading="lazy"
-               decoding="async"
                width="320"
                height="420"
-               alt="${b.title || tr.defaultBookName}">
+               alt="${b.title || "کتێب"}">
         </div>
 
         <div class="info">
@@ -232,33 +151,25 @@ async function load() {
           ${b.description ? `<div class="desc">${b.description}</div>` : ""}
 
           <div class="cta">
-            ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">${tr.readOnline}</a>` : ""}
-            ${downloadLink ? `<a href="${downloadLink}" target="_blank">${tr.download}</a>` : ""}
+            ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">بینینی ئۆنڵاین 📖</a>` : ""}
+            ${downloadLink ? `<a href="${downloadLink}" target="_blank">داگرتن ⬇️</a>` : ""}
           </div>
         </div>
       </div>
 
       ${preview ? `
-        <div class="section-title">${tr.livePreview}</div>
+        <div class="section-title">بینینی ڕاستەوخۆ</div>
         <div class="viewer">
           <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
         </div>
       ` : ""}
     `;
   } catch (err) {
-    wrap.innerHTML = `<div class="small">${tr.errorLoading}</div>`;
+    wrap.innerHTML = `<div class="small">هەڵە لە بارکردنی کتێب</div>`;
     console.error(err);
   }
 }
 
-langSelect.addEventListener("change", (e) => {
-  applyLanguage(e.target.value);
-  load();
-});
-
-/* English is primary/default like index */
-localStorage.setItem("siteLang", "en");
-applyLanguage("en");
 load();
 </script>
 
