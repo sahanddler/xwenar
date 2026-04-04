@@ -5,6 +5,18 @@
   margin:16px auto 24px;
   flex-wrap:wrap;
 }
+.top-notice {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #FF5722;
+  color: #fff;
+  text-align: center;
+  padding: 10px 15px;
+  font-size: 14px;
+  z-index: 9999;
+}
 
 .home-btn{
   border:none;
