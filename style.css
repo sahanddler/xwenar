@@ -4,6 +4,7 @@
   justify-content:center;
   margin:16px auto 24px;
   flex-wrap:wrap;
+}
 .modal {
   position: fixed;
   top: 0;
@@ -20,7 +21,7 @@
 
   z-index: 999999; /* VERY HIGH to stay above everything */
 }
-}
+
 
 .modal-box {
   background: #fff;
