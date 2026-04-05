@@ -1,3 +1,18 @@
+// ================== DIALOG ==================
+function closeModal() {
+  document.getElementById("appModal").style.display = "none";
+}
+
+// Show only once per user
+window.addEventListener("load", () => {
+  if (!localStorage.getItem("appModalShown")) {
+    document.getElementById("appModal").style.display = "flex";
+    localStorage.setItem("appModalShown", "true");
+  } else {
+    document.getElementById("appModal").style.display = "none";
+  }
+});
+
 // ================== CONFIG ==================
 const CATEGORIES = [
   { name: "ڕۆمان", file: "roman.json" },
