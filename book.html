@@ -1,30 +1,6 @@
-
 <!doctype html>
 <html lang="ckb" dir="rtl">
 <head>
-  <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getDatabase, ref, runTransaction, get } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "xwenar-f6a1b.firebaseapp.com",
-  databaseURL: "https://xwenar-f6a1b-default-rtdb.firebaseio.com",
-  projectId: "xwenar-f6a1b",
-  storageBucket: "xwenar-f6a1b.firebasestorage.app",
-  messagingSenderId: "484778165531",
-  appId: "1:484778165531:web:c55f0f75e140b69dbdbfbe"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// 🔥 make global
-window.db = db;
-window.ref = ref;
-window.runTransaction = runTransaction;
-window.get = get;
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -44,7 +20,6 @@ window.get = get;
 
   <link rel="stylesheet" href="style.css" />
 </head>
-  
 <body>
 
 
@@ -122,8 +97,8 @@ window.get = get;
   </div>
 </footer>
 
-<script src="app.js" type="module"></script>
-<script type="module">
+<script src="app.js"></script>
+<script>
 const file = qs("file");
 const id = parseInt(qs("id") || "0", 10);
 const rawName = qs("name") || "کتێب";
@@ -156,16 +131,6 @@ async function load() {
       return;
     }
 
-    // 🔥 VIEW COUNTER
-    const bookKey = file + "_" + id;
-
-    if (!hasViewed(bookKey)) {
-      await incrementView(bookKey);
-      markViewed(bookKey);
-    }
-
-    const views = await getViews(bookKey);
-
     const onlineLink = (b.online && b.online.trim()) ? b.online : "";
     const preview = drivePreview(onlineLink);
     const downloadLink = (b.download && b.download.trim()) ? b.download : "";
@@ -184,29 +149,26 @@ async function load() {
           <div class="h1">${b.title || ""}</div>
           <div class="small">${b.author || ""}</div>
 
-          <div class="views">👁 ${views} بینین</div>
-
           ${b.description ? `<div class="desc">${b.description}</div>` : ""}
 
           <div class="cta">
             ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">بینینی ئۆنڵاین 📖</a>` : ""}
             ${downloadLink ? `<a href="${downloadLink}" target="_blank">داگرتن ⬇️</a>` : ""}
           </div>
+             </div>
         </div>
+         <div class="top-notice">
+  داوا لە نووسەر یان وەڕگێڕ یان دەزگاکان دەکەین گەر پێیان باش نییە ئەم کتێبە لێرەبێ ئەوا پێمان ڕاگەیەنن
+</div>
       </div>
-
-      <div class="top-notice">
-        داوا لە نووسەر یان وەڕگێڕ یان دەزگاکان دەکەین گەر پێیان باش نییە ئەم کتێبە لێرەبێ ئەوا پێمان ڕاگەیەنن
-      </div>
-
+        
       ${preview ? `
         <div class="section-title">بینینی ڕاستەوخۆ</div>
         <div class="viewer">
           <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
-        </div>
+   
       ` : ""}
     `;
-
   } catch (err) {
     wrap.innerHTML = `<div class="small">هەڵە لە بارکردنی کتێب</div>`;
     console.error(err);
