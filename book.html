@@ -22,7 +22,6 @@
 </head>
 <body>
 
-
 <div class="topbar">
   <div class="row">
     <div class="brand" onclick="goBack()" style="cursor:pointer;">
@@ -119,6 +118,46 @@ function drivePreview(url) {
   return url;
 }
 
+// 👁️ ناردن و وەرگرتنی ژمارەی بینینەکان لە فایەربەیس
+async function recordView(fileCategory, bookId) {
+  if (!fileCategory) return;
+  
+  // دروستکردنی ئایدییەکی تایبەت بۆ هەر کتێبێک، بۆ نموونە "roman_5"
+  const uniqueBookId = `${fileCategory.replace('.json', '')}_${bookId}`;
+
+  // بەستەری فایەربەیسەکەی خۆت
+  const dbUrl = `https://xwenar-f6a1b-default-rtdb.firebaseio.com/views/${uniqueBookId}/count.json`;
+
+  try {
+    // 1. هێنانی ژمارەی بینینەکانی ئێستا
+    const response = await fetch(dbUrl);
+    let views = await response.json();
+    
+    // ئەگەر کتێبەکە نوێ بوو و هیچ بینینێکی نەبوو، بیکە بە سفر
+    views = views === null ? 0 : views;
+
+    // 2. زیادکردنی یەکێک بۆ بینینەکان
+    views++;
+
+    // 3. پیشاندانی ژمارە نوێیەکە بە بەکارهێنەر لەسەر شاشەکە
+    const viewElement = document.getElementById('viewCount');
+    if (viewElement) {
+      viewElement.innerText = views;
+    }
+
+    // 4. خەزنکردنەوەی ژمارە نوێیەکە لە بنکەی دراوەی فایەربەیس
+    await fetch(dbUrl, {
+      method: 'PUT',
+      body: JSON.stringify(views)
+    });
+
+  } catch (error) {
+    console.error("هەڵە هەیە لە هێنانی ژمارەی بینینەکان:", error);
+    const viewElement = document.getElementById('viewCount');
+    if (viewElement) viewElement.innerText = "بەردەست نییە"; 
+  }
+}
+
 async function load() {
   wrap.innerHTML = "چاوەڕوانبە...";
 
@@ -148,27 +187,34 @@ async function load() {
         <div class="info">
           <div class="h1">${b.title || ""}</div>
           <div class="small">${b.author || ""}</div>
+          
+          <div class="view-counter" style="margin-top: 8px; color: #777; font-size: 14px; background: rgba(0,0,0,0.05); padding: 5px 10px; border-radius: 6px; display: inline-block;">
+            <i class="fas fa-eye"></i> بینینەکان: <span id="viewCount" style="font-weight: bold;">...</span>
+          </div>
 
-          ${b.description ? `<div class="desc">${b.description}</div>` : ""}
+          ${b.description ? `<div class="desc" style="margin-top: 15px;">${b.description}</div>` : ""}
 
           <div class="cta">
             ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">بینینی ئۆنڵاین 📖</a>` : ""}
             ${downloadLink ? `<a href="${downloadLink}" target="_blank">داگرتن ⬇️</a>` : ""}
           </div>
-             </div>
         </div>
-         <div class="top-notice">
-  داوا لە نووسەر یان وەڕگێڕ یان دەزگاکان دەکەین گەر پێیان باش نییە ئەم کتێبە لێرەبێ ئەوا پێمان ڕاگەیەنن
-</div>
+      </div>
+      <div class="top-notice" style="margin-top: 20px;">
+        داوا لە نووسەر یان وەرگێڕ یان دەزگاکان دەکەین گەر پێیان باش نییە ئەم کتێبە لێرەبێ ئەوا پێمان ڕاگەیەنن
       </div>
         
       ${preview ? `
-        <div class="section-title">بینینی ڕاستەوخۆ</div>
+        <div class="section-title" style="margin-top: 30px;">بینینی ڕاستەوخۆ</div>
         <div class="viewer">
           <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
-   
+        </div>
       ` : ""}
     `;
+
+    // 🚀 بانگکردنی فەنکشنەکە دوای ئەوەی HTML ـەکە دروست بوو
+    recordView(file, id);
+
   } catch (err) {
     wrap.innerHTML = `<div class="small">هەڵە لە بارکردنی کتێب</div>`;
     console.error(err);
@@ -177,6 +223,7 @@ async function load() {
 
 load();
 </script>
+
 <div id="appModal" class="modal">
   <div class="modal-box">
 
