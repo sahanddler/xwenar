@@ -1,6 +1,4 @@
-// ================== FIREBASE ==================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getDatabase, ref, runTransaction, get } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAt7xG9EGsLk31KiA0jv37Bk3Ih0X7xE14",
