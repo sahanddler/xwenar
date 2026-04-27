@@ -1,3 +1,25 @@
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getDatabase, ref, runTransaction, get } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAt7xG9EGsLk31KiA0jv37Bk3Ih0X7xE14",
+  authDomain: "xwenar-f6a1b.firebaseapp.com",
+  databaseURL: "https://xwenar-f6a1b-default-rtdb.firebaseio.com",
+  projectId: "xwenar-f6a1b",
+  storageBucket: "xwenar-f6a1b.firebasestorage.app",
+  messagingSenderId: "484778165531",
+  appId: "1:484778165531:web:c55f0f75e140b69dbdbfbe"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.db = db;
+window.ref = ref;
+window.runTransaction = runTransaction;
+window.get = get;
+</script>
 // ================== DIALOG ==================
 function closeModal() {
   document.getElementById("appModal").style.display = "none";
