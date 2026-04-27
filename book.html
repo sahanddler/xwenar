@@ -97,8 +97,8 @@
   </div>
 </footer>
 
-<script src="app.js"></script>
-<script>
+<script src="app.js" type="module"></script>
+<script type="module">
 const file = qs("file");
 const id = parseInt(qs("id") || "0", 10);
 const rawName = qs("name") || "کتێب";
@@ -131,6 +131,16 @@ async function load() {
       return;
     }
 
+    // 🔥 VIEW COUNTER
+    const bookKey = file + "_" + id;
+
+    if (!hasViewed(bookKey)) {
+      await incrementView(bookKey);
+      markViewed(bookKey);
+    }
+
+    const views = await getViews(bookKey);
+
     const onlineLink = (b.online && b.online.trim()) ? b.online : "";
     const preview = drivePreview(onlineLink);
     const downloadLink = (b.download && b.download.trim()) ? b.download : "";
@@ -149,26 +159,29 @@ async function load() {
           <div class="h1">${b.title || ""}</div>
           <div class="small">${b.author || ""}</div>
 
+          <div class="views">👁 ${views} بینین</div>
+
           ${b.description ? `<div class="desc">${b.description}</div>` : ""}
 
           <div class="cta">
             ${onlineLink ? `<a class="primary" href="${onlineLink}" target="_blank">بینینی ئۆنڵاین 📖</a>` : ""}
             ${downloadLink ? `<a href="${downloadLink}" target="_blank">داگرتن ⬇️</a>` : ""}
           </div>
-             </div>
         </div>
-         <div class="top-notice">
-  داوا لە نووسەر یان وەڕگێڕ یان دەزگاکان دەکەین گەر پێیان باش نییە ئەم کتێبە لێرەبێ ئەوا پێمان ڕاگەیەنن
-</div>
       </div>
-        
+
+      <div class="top-notice">
+        داوا لە نووسەر یان وەڕگێڕ یان دەزگاکان دەکەین گەر پێیان باش نییە ئەم کتێبە لێرەبێ ئەوا پێمان ڕاگەیەنن
+      </div>
+
       ${preview ? `
         <div class="section-title">بینینی ڕاستەوخۆ</div>
         <div class="viewer">
           <iframe src="${preview}" allow="autoplay" loading="lazy"></iframe>
-   
+        </div>
       ` : ""}
     `;
+
   } catch (err) {
     wrap.innerHTML = `<div class="small">هەڵە لە بارکردنی کتێب</div>`;
     console.error(err);
