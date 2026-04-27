@@ -1,4 +1,4 @@
-<script type="module">
+// ================== FIREBASE ==================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getDatabase, ref, runTransaction, get } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
@@ -15,17 +15,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.db = db;
-window.ref = ref;
-window.runTransaction = runTransaction;
-window.get = get;
-</script>
+// ================== VIEW SYSTEM ==================
+async function incrementView(bookKey) {
+  const viewRef = ref(db, "views/" + bookKey);
+  await runTransaction(viewRef, (current) => (current || 0) + 1);
+}
+
+async function getViews(bookKey) {
+  const snapshot = await get(ref(db, "views/" + bookKey));
+  return snapshot.exists() ? snapshot.val() : 0;
+}
+
+function hasViewed(bookKey) {
+  return localStorage.getItem("viewed_" + bookKey);
+}
+
+function markViewed(bookKey) {
+  localStorage.setItem("viewed_" + bookKey, "1");
+}
+
 // ================== DIALOG ==================
 function closeModal() {
   document.getElementById("appModal").style.display = "none";
 }
 
-// Show only once per user
 window.addEventListener("load", () => {
   if (!localStorage.getItem("appModalShown")) {
     document.getElementById("appModal").style.display = "flex";
@@ -58,8 +71,7 @@ const CATEGORIES = [
   { name: "بادینی", file: "badini.json" },
   { name: "دەروونزانی", file: "darwnzani.json" },
   { name: "جوگرافیا", file: "jugrafya.json" },
-    { name: "پزیشکی", file: "pezeshki.json" },
-
+  { name: "پزیشکی", file: "pezeshki.json" }
 ];
 
 const BASE = "https://raw.githubusercontent.com/sahanddler/json/main/";
@@ -129,7 +141,7 @@ function resolveLinks(book) {
   const onlineRaw = pick(book, [
     "online","read","view","viewer",
     "url_view","link_view","drive_view",
-    "open","link" // 🔥 THIS FIX
+    "open","link"
   ]);
 
   const downloadRaw = pick(book, [
@@ -150,43 +162,32 @@ function resolveLinks(book) {
   return { online, download };
 }
 
-
 function mapBook(book) {
-  const title = pick(book, ["title", "name", "book_name", "bookTitle", "t"]) || "Untitled";
-  const author = pick(book, ["author", "writer", "by", "book_author", "a"]) || "Unknown";
-  const image = ensureHttp(pick(book, ["image", "img", "cover", "poster", "thumbnail", "photo"]));
-  const description = pick(book, ["description", "desc", "info", "about", "summary", "bio"]) || "";
+  const title = pick(book, ["title","name","book_name","bookTitle","t"]) || "Untitled";
+  const author = pick(book, ["author","writer","by","book_author","a"]) || "Unknown";
+  const image = ensureHttp(pick(book, ["image","img","cover","poster","thumbnail","photo"]));
+  const description = pick(book, ["description","desc","info","about","summary","bio"]) || "";
 
   const { online, download } = resolveLinks(book);
 
-  return {
-    raw: book,
-    title,
-    author,
-    image,
-    description,
-    online,
-    download
-  };
+  return { raw: book, title, author, image, description, online, download };
 }
 
-// ================== FETCH (FAST + CACHED) ==================
+// ================== FETCH ==================
 async function fetchBooks(file, force = false){
   const cacheKey = "books_cache_" + file;
   const timeKey  = "books_time_" + file;
-  const TTL = 5 * 60 * 1000; // 5 minutes
+  const TTL = 5 * 60 * 1000;
 
   const now = Date.now();
   const cached = localStorage.getItem(cacheKey);
   const savedTime = Number(localStorage.getItem(timeKey));
 
-  // ✅ Use cache if valid and not forced
   if (!force && cached && savedTime && (now - savedTime) < TTL) {
     return JSON.parse(cached);
   }
 
-  // 🔄 Fetch fresh data
-  const url = BASE + file + "?r=" + now; // break GitHub cache safely
+  const url = BASE + file + "?r=" + now;
   const res = await fetch(url, { cache: "no-store" });
 
   if (!res.ok) throw new Error("HTTP " + res.status);
@@ -194,7 +195,6 @@ async function fetchBooks(file, force = false){
   const data = await res.json();
   const books = normalizeArray(data).map(mapBook);
 
-  // 💾 Save cache
   localStorage.setItem(cacheKey, JSON.stringify(books));
   localStorage.setItem(timeKey, now);
 
