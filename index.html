@@ -176,26 +176,36 @@
       `.toLowerCase();
     }
 
-    function renderResults(list) {
-      if (!list.length) {
-        resultsEl.style.display = "none";
-        resultsEl.innerHTML = "";
-        return;
-      }
+   function renderResults(list) {
+  if (!list.length) {
+    resultsEl.style.display = "none";
+    resultsEl.innerHTML = "";
+    return;
+  }
 
-      resultsEl.innerHTML = list.slice(0, 20).map(b => `
-        <div class="search-item" onclick="openBook(${JSON.stringify(b.file)}, ${b.id}, ${JSON.stringify(b.cat || "")})">
-          <img src="${b.image || ""}" alt="${b.title || "کتێب"}">
-          <div>
-            <div class="t">${b.title || ""}</div>
-            <div class="a">${b.author || ""}</div>
-          </div>
-        </div>
-      `).join("");
+  resultsEl.innerHTML = "";
 
-      resultsEl.style.display = "block";
-    }
+  list.slice(0, 20).forEach(b => {
+    const item = document.createElement("div");
+    item.className = "search-item";
 
+    item.innerHTML = `
+      <img src="${b.image || ""}" alt="${b.title || "کتێب"}">
+      <div>
+        <div class="t">${b.title || ""}</div>
+        <div class="a">${b.author || ""}</div>
+      </div>
+    `;
+
+    item.addEventListener("click", () => {
+      openBook(b.file, b.id, b.cat || "");
+    });
+
+    resultsEl.appendChild(item);
+  });
+
+  resultsEl.style.display = "block";
+}
     window.openBook = function(file, id, name) {
       location.href = `book.html?file=${encodeURIComponent(file)}&id=${id}&name=${encodeURIComponent(name)}`;
     };
