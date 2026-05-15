@@ -287,18 +287,20 @@ function sanitizeKey(key) {
 
 function viewKeyFor(book) {
 
-  // 1. PDF URL
+  // use both url and download
+  const pdfUrl =
+    book.url ||
+    book.download ||
+    "";
 
+  // 1. PDF URL
   if (
-    book.url &&
-    typeof book.url === "string" &&
-    book.url.startsWith("http")
+    typeof pdfUrl === "string" &&
+    pdfUrl.startsWith("http")
   ) {
 
     const match =
-      book.url.match(
-        /([^/]+)\.pdf/i
-      );
+      pdfUrl.match(/([^/]+)\.pdf/i);
 
     if (match && match[1]) {
 
@@ -306,6 +308,44 @@ function viewKeyFor(book) {
         "book_" + match[1]
       );
     }
+  }
+
+  // 2. explicit id
+  if (
+    book.id &&
+    String(book.id).trim() !== ""
+  ) {
+
+    return sanitizeKey(
+      "book_" + book.id
+    );
+  }
+
+  // 3. link
+  if (
+    book.link &&
+    String(book.link).trim() !== ""
+  ) {
+
+    return sanitizeKey(
+      "book_" +
+      stableHashHex8(book.link)
+    );
+  }
+
+  // 4. fallback
+  const fallback =
+    (book.name || book.title || "") +
+    "|" +
+    (book.author || "") +
+    "|" +
+    (book.category || "");
+
+  return sanitizeKey(
+    "book_" +
+    stableHashHex8(fallback)
+  );
+}
   }
 
   // 2. Explicit ID
