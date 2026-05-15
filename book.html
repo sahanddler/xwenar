@@ -144,6 +144,7 @@
 <script src="app.js"></script>
 
 <!-- FIREBASE + VIEW SYSTEM -->
+```html
 <script type="module">
 
 /* =========================
@@ -287,17 +288,16 @@ function sanitizeKey(key) {
 
 function viewKeyFor(book) {
 
-  // use both url and download
   const pdfUrl =
-    book.url ||
-    book.download ||
-    "";
+    typeof book.url === "string"
+      ? book.url
+      : typeof book.download === "string"
+      ? book.download
+      : "";
 
   // 1. PDF URL
-  if (
-    typeof pdfUrl === "string" &&
-    pdfUrl.startsWith("http")
-  ) {
+
+  if (pdfUrl.startsWith("http")) {
 
     const match =
       pdfUrl.match(/([^/]+)\.pdf/i);
@@ -311,6 +311,7 @@ function viewKeyFor(book) {
   }
 
   // 2. explicit id
+
   if (
     book.id &&
     String(book.id).trim() !== ""
@@ -322,9 +323,10 @@ function viewKeyFor(book) {
   }
 
   // 3. link
+
   if (
-    book.link &&
-    String(book.link).trim() !== ""
+    typeof book.link === "string" &&
+    book.link.trim() !== ""
   ) {
 
     return sanitizeKey(
@@ -334,49 +336,9 @@ function viewKeyFor(book) {
   }
 
   // 4. fallback
+
   const fallback =
     (book.name || book.title || "") +
-    "|" +
-    (book.author || "") +
-    "|" +
-    (book.category || "");
-
-  return sanitizeKey(
-    "book_" +
-    stableHashHex8(fallback)
-  );
-}
-  }
-
-  // 2. Explicit ID
-
-  if (
-    book.id &&
-    String(book.id).trim() !== ""
-  ) {
-
-    return sanitizeKey(
-      "book_" + book.id
-    );
-  }
-
-  // 3. link
-
-  if (
-    book.link &&
-    String(book.link).trim() !== ""
-  ) {
-
-    return sanitizeKey(
-      "book_" +
-      stableHashHex8(book.link)
-    );
-  }
-
-  // 4. fallback
-
-  const fallback =
-    (book.name || "") +
     "|" +
     (book.author || "") +
     "|" +
@@ -406,24 +368,29 @@ async function getViewCount(viewKey) {
 
     const value = snapshot.val();
 
-    // integer
+    // plain integer
+
     if (typeof value === "number") {
       return value;
     }
 
     // {count:N}
+
     if (
       value &&
       typeof value.count === "number"
     ) {
+
       return value.count;
     }
 
     // {views:N}
+
     if (
       value &&
       typeof value.views === "number"
     ) {
+
       return value.views;
     }
 
@@ -455,6 +422,7 @@ async function incrementView(book) {
   try {
 
     await runTransaction(
+
       counterRef,
 
       (currentValue) => {
@@ -512,12 +480,17 @@ async function recordView(book) {
   const viewKey =
     viewKeyFor(book);
 
+  console.log(
+    "VIEW KEY:",
+    viewKey
+  );
+
   const viewElement =
     document.getElementById(
       "viewCount"
     );
 
-  // show current views
+  // current count
 
   const currentViews =
     await getViewCount(viewKey);
@@ -540,7 +513,7 @@ async function recordView(book) {
 
   await incrementView(book);
 
-  // reload updated count
+  // updated count
 
   const updatedViews =
     await getViewCount(viewKey);
@@ -579,29 +552,33 @@ async function load() {
       return;
     }
 
-    // top title
+    // title
 
     document.getElementById(
       "topTitle"
     ).innerText =
-      b.name || "کتێب";
+      b.name || b.title || "کتێب";
 
     // online link
 
     const onlineLink =
-      (b.online && b.online.trim())
-      ? b.online
-      : "";
+      typeof b.online === "string"
+        ? b.online
+        : "";
 
     // preview
 
     const preview =
       drivePreview(onlineLink);
 
-    // download
+    // download link
 
-  const downloadLink =
-  (b.url || b.download || "").trim();
+    const downloadLink =
+      typeof b.url === "string"
+        ? b.url
+        : typeof b.download === "string"
+        ? b.download
+        : "";
 
     wrap.innerHTML = `
 
@@ -614,7 +591,7 @@ async function load() {
             loading="lazy"
             width="320"
             height="420"
-            alt="${b.name || "کتێب"}"
+            alt="${b.name || b.title || "کتێب"}"
           >
 
         </div>
@@ -622,7 +599,7 @@ async function load() {
         <div class="info">
 
           <div class="h1">
-            ${b.name || ""}
+            ${b.name || b.title || ""}
           </div>
 
           <div class="small">
@@ -750,6 +727,7 @@ async function load() {
 load();
 
 </script>
+```
 
 <!-- APP MODAL -->
 <div id="appModal" class="modal">
