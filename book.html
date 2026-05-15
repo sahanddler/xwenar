@@ -600,10 +600,8 @@ async function load() {
 
     // download
 
-    const downloadLink =
-      (b.url && b.url.trim())
-      ? b.url
-      : "";
+  const downloadLink =
+  (b.url || b.download || "").trim();
 
     wrap.innerHTML = `
 
