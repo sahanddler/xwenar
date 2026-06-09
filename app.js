@@ -28,7 +28,7 @@ const CATEGORIES = [
   { name: "تەکنەلۆژیا", file: "taknologya.json" },
   { name: "گەشەپێدان", file: "gashapedan.json" },
   { name: "کۆمەڵایەتی", file: "komalayati.json" },
-  { name: "منداڵان", file: "mndalan.json" },
+  { name: "منداڵان", file: "mandalan.json" },
   { name: "هەمەڕەنگ", file: "hamarang.json" },
   { name: "زمانەکان", file: "zmanakan.json" },
   { name: "زانستی", file: "zansti.json" },
